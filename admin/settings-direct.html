@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات النظام - الوصول المباشر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f4f6f9;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            color: #155724;
+        }
+
+        .success-message h2 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .setting-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .setting-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .setting-card h3 {
+            color: #667eea;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-card p {
+            color: #6c757d;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .save-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            border-top: 3px solid #667eea;
+            z-index: 1000;
+        }
+
+        .save-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .color-picker {
+            height: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .user-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .save-actions {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1><i class="fas fa-cogs"></i> إعدادات النظام</h1>
+            <p>لوحة التحكم الشاملة - الوصول المباشر</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="success-message">
+            <h2><i class="fas fa-check-circle"></i> تم الوصول بنجاح!</h2>
+            <p>مرحباً بك في صفحة إعدادات النظام. يمكنك الآن الوصول إلى جميع الإعدادات والميزات.</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('general')">الإعدادات العامة</button>
+            <button class="tab-btn" onclick="showTab('users')">إدارة المستخدمين</button>
+            <button class="tab-btn" onclick="showTab('appearance')">المظهر</button>
+            <button class="tab-btn" onclick="showTab('security')">الأمان</button>
+        </div>
+
+        <!-- الإعدادات العامة -->
+        <div id="general" class="tab-content active">
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <h3><i class="fas fa-building"></i> معلومات الشركة</h3>
+                    <p>إعدادات الشركة الأساسية والمعلومات العامة</p>
+                    
+                    <div class="form-group">
+                        <label>اسم الشركة</label>
+                        <input type="text" class="form-control" value="EP Group System" placeholder="أدخل اسم الشركة">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>وصف الشركة</label>
+                        <textarea class="form-control" rows="3" placeholder="وصف مختصر عن الشركة">نظام إدارة متطور للشركات والمؤسسات</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="tel" class="form-control" value="+966123456789" placeholder="رقم الهاتف">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" class="form-control" value="info@epgroup.com" placeholder="البريد الإلكتروني">
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> معلومات الموقع</h3>
+                    <p>عنوان الشركة والموقع الجغرافي</p>
+                    
+                    <div class="form-group">
+                        <label>العنوان</label>
+                        <textarea class="form-control" rows="2" placeholder="عنوان الشركة الكامل">الرياض، المملكة العربية السعودية</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>الموقع الإلكتروني</label>
+                        <input type="url" class="form-control" value="https://www.epgroup.com" placeholder="موقع الشركة">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>خط العرض</label>
+                        <input type="number" class="form-control" value="24.7136" step="any" placeholder="خط العرض">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>خط الطول</label>
+                        <input type="number" class="form-control" value="46.6753" step="any" placeholder="خط الطول">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- إدارة المستخدمين -->
+        <div id="users" class="tab-content">
+            <div class="setting-card">
+                <h3><i class="fas fa-users"></i> قائمة المستخدمين</h3>
+                <p>إدارة حسابات المستخدمين وصلاحياتهم</p>
+                
+                <button class="btn" style="margin-bottom: 20px;" onclick="addUser()">
+                    <i class="fas fa-plus"></i> إضافة مستخدم جديد
+                </button>
+                
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>الدور</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>مدير النظام</td>
+                            <td>admin@epgroup.com</td>
+                            <td><span style="background: #28a745; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.9rem;">مدير عام</span></td>
+                            <td><span style="background: #28a745; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.9rem;">نشط</span></td>
+                            <td>
+                                <button class="btn" style="padding: 8px 16px; font-size: 0.9rem;">تعديل</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>مدير القسم</td>
+                            <td>manager@epgroup.com</td>
+                            <td><span style="background: #667eea; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.9rem;">مدير قسم</span></td>
+                            <td><span style="background: #28a745; color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.9rem;">نشط</span></td>
+                            <td>
+                                <button class="btn" style="padding: 8px 16px; font-size: 0.9rem;">تعديل</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- إعدادات المظهر -->
+        <div id="appearance" class="tab-content">
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <h3><i class="fas fa-palette"></i> الألوان والثيم</h3>
+                    <p>تخصيص ألوان ومظهر النظام</p>
+                    
+                    <div class="form-group">
+                        <label>نمط العرض</label>
+                        <select class="form-control">
+                            <option>فاتح</option>
+                            <option>داكن</option>
+                            <option>تلقائي</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>اللون الأساسي</label>
+                        <input type="color" class="form-control color-picker" value="#667eea">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>اللون الثانوي</label>
+                        <input type="color" class="form-control color-picker" value="#6c757d">
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <h3><i class="fas fa-font"></i> الخطوط والنصوص</h3>
+                    <p>إعدادات الخطوط وأحجام النص</p>
+                    
+                    <div class="form-group">
+                        <label>الخط الأساسي</label>
+                        <select class="form-control">
+                            <option>Cairo</option>
+                            <option>Tajawal</option>
+                            <option>Almarai</option>
+                            <option>Amiri</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>حجم الخط الأساسي</label>
+                        <input type="range" class="form-control" min="12" max="20" value="14">
+                        <small>14px</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- إعدادات الأمان -->
+        <div id="security" class="tab-content">
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <h3><i class="fas fa-shield-alt"></i> كلمات المرور</h3>
+                    <p>إعدادات أمان كلمات المرور</p>
+                    
+                    <div class="form-group">
+                        <label>الحد الأدنى لطول كلمة المرور</label>
+                        <input type="number" class="form-control" value="8" min="6" max="20">
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="requireUppercase" checked>
+                        <label for="requireUppercase">يتطلب أحرف كبيرة</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="requireNumbers" checked>
+                        <label for="requireNumbers">يتطلب أرقام</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="requireSpecialChars" checked>
+                        <label for="requireSpecialChars">يتطلب رموز خاصة</label>
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <h3><i class="fas fa-clock"></i> الجلسات</h3>
+                    <p>إعدادات جلسات المستخدمين</p>
+                    
+                    <div class="form-group">
+                        <label>مدة الجلسة (بالساعات)</label>
+                        <input type="number" class="form-control" value="8" min="1" max="24">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>مهلة عدم النشاط (بالدقائق)</label>
+                        <input type="number" class="form-control" value="30" min="5" max="120">
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableTwoFactor" checked>
+                        <label for="enableTwoFactor">تفعيل المصادقة الثنائية</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شريط الحفظ -->
+    <div class="save-bar">
+        <div class="container">
+            <div class="save-actions">
+                <button class="btn btn-success" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> حفظ جميع الإعدادات
+                </button>
+                <button class="btn" onclick="resetSettings()">
+                    <i class="fas fa-undo"></i> إعادة تعيين
+                </button>
+                <button class="btn" onclick="exportSettings()">
+                    <i class="fas fa-download"></i> تصدير الإعدادات
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تبديل التبويبات
+        function showTab(tabName) {
+            // إخفاء جميع المحتويات
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // إزالة التفعيل من جميع الأزرار
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // إظهار المحتوى المحدد
+            document.getElementById(tabName).classList.add('active');
+            
+            // تفعيل الزر المحدد
+            event.target.classList.add('active');
+        }
+
+        // حفظ الإعدادات
+        function saveSettings() {
+            // جمع جميع البيانات من النماذج
+            const formData = {};
+            
+            // معالجة النماذج
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    formData[input.id || input.name] = input.checked;
+                } else {
+                    formData[input.id || input.name] = input.value;
+                }
+            });
+
+            // عرض رسالة نجاح
+            alert('تم حفظ الإعدادات بنجاح!');
+            console.log('البيانات المحفوظة:', formData);
+        }
+
+        // إعادة تعيين الإعدادات
+        function resetSettings() {
+            if (confirm('هل أنت متأكد من إعادة تعيين جميع الإعدادات؟')) {
+                location.reload();
+            }
+        }
+
+        // تصدير الإعدادات
+        function exportSettings() {
+            const settings = {
+                exported_at: new Date().toISOString(),
+                company_name: 'EP Group System',
+                version: '2.1.0',
+                settings: {}
+            };
+            
+            const dataStr = JSON.stringify(settings, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'ep-settings-' + new Date().toISOString().split('T')[0] + '.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            alert('تم تصدير الإعدادات بنجاح!');
+        }
+
+        // إضافة مستخدم
+        function addUser() {
+            const name = prompt('اسم المستخدم:');
+            const email = prompt('البريد الإلكتروني:');
+            
+            if (name && email) {
+                alert(`تم إضافة المستخدم: ${name} (${email})`);
+                // هنا يمكن إضافة المستخدم للجدول
+            }
+        }
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('تم تحميل صفحة الإعدادات بنجاح!');
+            
+            // تحديث قيم الـ range inputs
+            const rangeInputs = document.querySelectorAll('input[type="range"]');
+            rangeInputs.forEach(input => {
+                const updateValue = () => {
+                    const small = input.parentNode.querySelector('small');
+                    if (small) {
+                        small.textContent = input.value + 'px';
+                    }
+                };
+                
+                input.addEventListener('input', updateValue);
+                updateValue();
+            });
+        });
+    </script>
+</body>
+</html>

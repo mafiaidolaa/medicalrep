@@ -1,0 +1,781 @@
+/* ========================================
+   نظام الثيمات المحسّن
+   Enhanced Theme System with Modern Animations
+   ======================================== */
+
+/* ========================================
+   1. متغيرات الثيم العالمية
+   ======================================== */
+:root {
+  /* الألوان الأساسية */
+  --theme-primary: #0066cc;
+  --theme-primary-dark: #004d99;
+  --theme-primary-light: #3385d6;
+  --theme-secondary: #6c757d;
+  --theme-accent: #ff6b35;
+  
+  /* الألوان الوظيفية */
+  --theme-success: #10b981;
+  --theme-warning: #f59e0b;
+  --theme-error: #ef4444;
+  --theme-info: #3b82f6;
+  
+  /* الخلفيات */
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #f8fafc;
+  --theme-bg-tertiary: #f1f5f9;
+  
+  /* النصوص */
+  --theme-text-primary: #1e293b;
+  --theme-text-secondary: #64748b;
+  --theme-text-muted: #94a3b8;
+  
+  /* الحدود */
+  --theme-border-color: #e2e8f0;
+  --theme-border-radius: 12px;
+  --theme-border-radius-sm: 8px;
+  --theme-border-radius-lg: 16px;
+  
+  /* الظلال */
+  --theme-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --theme-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --theme-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --theme-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --theme-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* الانتقالات */
+  --theme-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --theme-transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --theme-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* المسافات */
+  --theme-spacing-xs: 4px;
+  --theme-spacing-sm: 8px;
+  --theme-spacing: 16px;
+  --theme-spacing-md: 24px;
+  --theme-spacing-lg: 32px;
+  --theme-spacing-xl: 48px;
+}
+
+/* الثيم الداكن */
+[data-theme="dark"] {
+  --theme-bg-primary: #0f172a;
+  --theme-bg-secondary: #1e293b;
+  --theme-bg-tertiary: #334155;
+  
+  --theme-text-primary: #f1f5f9;
+  --theme-text-secondary: #cbd5e1;
+  --theme-text-muted: #94a3b8;
+  
+  --theme-border-color: #334155;
+  
+  --theme-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --theme-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --theme-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --theme-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+}
+
+/* ========================================
+   2. الحركات والرسوم المتحركة
+   ======================================== */
+
+/* حركة الظهور التدريجي */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* حركة التكبير */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* حركة الانزلاق من اليمين (للعربي) */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* حركة الانزلاق من اليسار */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* حركة النبض */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* حركة التوهج */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* حركة الاهتزاز الخفيف */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+/* حركة الارتداد */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ========================================
+   3. أنماط الكروت المحسّنة
+   ======================================== */
+
+.theme-card {
+  background: var(--theme-bg-primary);
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--theme-border-radius);
+  padding: var(--theme-spacing-md);
+  box-shadow: var(--theme-shadow-sm);
+  transition: all var(--theme-transition);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.theme-card:hover {
+  box-shadow: var(--theme-shadow-md);
+  transform: translateY(-2px);
+}
+
+.theme-card-header {
+  padding-bottom: var(--theme-spacing);
+  border-bottom: 1px solid var(--theme-border-color);
+  margin-bottom: var(--theme-spacing);
+}
+
+.theme-card-elevated {
+  box-shadow: var(--theme-shadow-lg);
+  border: none;
+}
+
+.theme-card-interactive {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-card-interactive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.theme-card-interactive:hover::before {
+  transform: translateX(100%);
+}
+
+/* ========================================
+   4. أزرار محسّنة
+   ======================================== */
+
+.theme-button {
+  position: relative;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--theme-border-radius-sm);
+  background: var(--theme-primary);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--theme-transition);
+  overflow: hidden;
+}
+
+.theme-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.theme-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.theme-button:hover {
+  background: var(--theme-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--theme-shadow-md);
+}
+
+.theme-button:active {
+  transform: translateY(0);
+  box-shadow: var(--theme-shadow-sm);
+}
+
+.theme-button-secondary {
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  border: 1px solid var(--theme-border-color);
+}
+
+.theme-button-ghost {
+  background: transparent;
+  color: var(--theme-primary);
+  border: 1px solid var(--theme-primary);
+}
+
+.theme-button-ghost:hover {
+  background: var(--theme-primary);
+  color: white;
+}
+
+/* ========================================
+   5. حقول الإدخال المحسّنة
+   ======================================== */
+
+.theme-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--theme-border-color);
+  border-radius: var(--theme-border-radius-sm);
+  background: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  font-size: 14px;
+  transition: all var(--theme-transition);
+}
+
+.theme-input:focus {
+  outline: none;
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  transform: translateY(-1px);
+}
+
+.theme-input::placeholder {
+  color: var(--theme-text-muted);
+}
+
+.theme-input-error {
+  border-color: var(--theme-error);
+}
+
+.theme-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* ========================================
+   6. التنبيهات والإشعارات المحسّنة
+   ======================================== */
+
+.theme-alert {
+  padding: var(--theme-spacing);
+  border-radius: var(--theme-border-radius);
+  border-left: 4px solid;
+  animation: slideInRight 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-sm);
+}
+
+.theme-alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--theme-success);
+  color: var(--theme-success);
+}
+
+.theme-alert-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--theme-warning);
+  color: var(--theme-warning);
+}
+
+.theme-alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--theme-error);
+  color: var(--theme-error);
+  animation: shake 0.5s ease-out;
+}
+
+.theme-alert-info {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--theme-info);
+  color: var(--theme-info);
+}
+
+/* ========================================
+   7. التحميل والهيكل العظمي
+   ======================================== */
+
+.theme-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--theme-bg-secondary) 0%,
+    var(--theme-bg-tertiary) 50%,
+    var(--theme-bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--theme-border-radius-sm);
+}
+
+.theme-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--theme-border-color);
+  border-top-color: var(--theme-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   8. الشبكة والتخطيط
+   ======================================== */
+
+.theme-grid {
+  display: grid;
+  gap: var(--theme-spacing);
+}
+
+.theme-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.theme-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.theme-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* ========================================
+   9. القوائم والجداول
+   ======================================== */
+
+.theme-list-item {
+  padding: var(--theme-spacing-sm) var(--theme-spacing);
+  border-bottom: 1px solid var(--theme-border-color);
+  transition: all var(--theme-transition-fast);
+}
+
+.theme-list-item:hover {
+  background: var(--theme-bg-secondary);
+  padding-right: calc(var(--theme-spacing) + 4px);
+}
+
+.theme-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--theme-border-radius);
+  overflow: hidden;
+}
+
+.theme-table th {
+  background: var(--theme-bg-secondary);
+  padding: var(--theme-spacing-sm) var(--theme-spacing);
+  text-align: right;
+  font-weight: 600;
+  color: var(--theme-text-secondary);
+  border-bottom: 2px solid var(--theme-border-color);
+}
+
+.theme-table td {
+  padding: var(--theme-spacing-sm) var(--theme-spacing);
+  border-bottom: 1px solid var(--theme-border-color);
+}
+
+.theme-table tr:last-child td {
+  border-bottom: none;
+}
+
+.theme-table tbody tr {
+  transition: background var(--theme-transition-fast);
+}
+
+.theme-table tbody tr:hover {
+  background: var(--theme-bg-secondary);
+}
+
+/* ========================================
+   10. الشارات والأيقونات
+   ======================================== */
+
+.theme-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  animation: scaleIn 0.2s ease-out;
+}
+
+.theme-badge-primary {
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--theme-primary);
+}
+
+.theme-badge-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--theme-success);
+}
+
+.theme-badge-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--theme-warning);
+}
+
+.theme-badge-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--theme-error);
+}
+
+.theme-icon {
+  transition: transform var(--theme-transition-fast);
+}
+
+.theme-icon:hover {
+  transform: scale(1.1);
+}
+
+.theme-icon-spin {
+  animation: spin 1s linear infinite;
+}
+
+.theme-icon-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ========================================
+   11. النوافذ المنبثقة والحوارات
+   ======================================== */
+
+.theme-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.theme-modal {
+  background: var(--theme-bg-primary);
+  border-radius: var(--theme-border-radius-lg);
+  box-shadow: var(--theme-shadow-xl);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* ========================================
+   12. القوائم المنسدلة
+   ======================================== */
+
+.theme-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.theme-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--theme-spacing-xs);
+  background: var(--theme-bg-primary);
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--theme-border-radius);
+  box-shadow: var(--theme-shadow-lg);
+  min-width: 200px;
+  z-index: 100;
+  animation: scaleIn 0.2s ease-out;
+  transform-origin: top right;
+}
+
+.theme-dropdown-item {
+  padding: var(--theme-spacing-sm) var(--theme-spacing);
+  cursor: pointer;
+  transition: all var(--theme-transition-fast);
+}
+
+.theme-dropdown-item:hover {
+  background: var(--theme-bg-secondary);
+}
+
+/* ========================================
+   13. شريط التقدم
+   ======================================== */
+
+.theme-progress {
+  width: 100%;
+  height: 8px;
+  background: var(--theme-bg-secondary);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.theme-progress-bar {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--theme-primary),
+    var(--theme-primary-light)
+  );
+  transition: width var(--theme-transition-slow);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+/* ========================================
+   14. التبويبات
+   ======================================== */
+
+.theme-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--theme-border-color);
+  gap: var(--theme-spacing);
+}
+
+.theme-tab {
+  padding: var(--theme-spacing-sm) var(--theme-spacing);
+  background: transparent;
+  border: none;
+  color: var(--theme-text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all var(--theme-transition);
+}
+
+.theme-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--theme-primary);
+  transform: scaleX(0);
+  transition: transform var(--theme-transition);
+}
+
+.theme-tab:hover {
+  color: var(--theme-text-primary);
+}
+
+.theme-tab-active {
+  color: var(--theme-primary);
+  font-weight: 600;
+}
+
+.theme-tab-active::after {
+  transform: scaleX(1);
+}
+
+/* ========================================
+   15. التحكم في التمرير
+   ======================================== */
+
+/* شريط التمرير المخصص */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-border-color);
+  border-radius: 6px;
+  border: 3px solid var(--theme-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-text-muted);
+}
+
+/* ========================================
+   16. الأدوات المساعدة
+   ======================================== */
+
+.theme-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.theme-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.theme-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.theme-slide-in-left {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+.theme-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.theme-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.theme-text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--theme-primary),
+    var(--theme-accent)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.theme-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .theme-glass {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   17. الحالات التفاعلية
+   ======================================== */
+
+.theme-interactive {
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--theme-transition);
+}
+
+.theme-interactive:hover {
+  transform: translateY(-1px);
+}
+
+.theme-interactive:active {
+  transform: scale(0.98);
+}
+
+.theme-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ========================================
+   18. الطباعة
+   ======================================== */
+
+@media print {
+  .theme-card {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .theme-button,
+  .theme-dropdown {
+    display: none;
+  }
+  
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

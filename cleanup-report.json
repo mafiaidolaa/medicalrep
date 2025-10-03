@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-10-02T07:09:56.739Z",
+  "deletedFiles": 160,
+  "cleanedBytes": 811051611,
+  "cleanedSize": "773.48 MB",
+  "errors": 0,
+  "files": [
+    "capacitor.config.ts.bak",
+    "next.config.backup.js",
+    "next.config.clean.js",
+    "next.config.final.js",
+    "next.config.optimized.js",
+    "next.config.performance.js",
+    "next.config.production.js",
+    "next.config.professional.js",
+    "next.config.ultra.js",
+    "package.fixed.json",
+    "package.optimized.json",
+    "package.professional.json",
+    "package.windows-fixed.json",
+    "src\\lib\\accounts\\expenses.ts.bak",
+    "src\\pages\\expenses\\expense-dashboard.tsx.bak",
+    "tsconfig.production.json",
+    "ACTIVITY_LOCATION_SYSTEM_GUIDE.md",
+    "ACTIVITY_LOGGING_GUIDE.md",
+    "ACTIVITY_LOGGING_SETUP_GUIDE.md",
+    "ACTIVITY_LOG_FIX_INSTRUCTIONS.md"
+  ],
+  "errorDetails": []
+}

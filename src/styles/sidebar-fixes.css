@@ -1,0 +1,100 @@
+/* Additional Sidebar Fixes */
+
+/* Ensure sidebar has proper z-index and positioning */
+[data-sidebar="sidebar"] {
+  z-index: 10;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  transition: transform 0.2s ease-in-out;
+}
+
+[data-side="right"] {
+  right: 0;
+  left: auto;
+}
+
+/* Sidebar content styling */
+[data-sidebar="sidebar"] {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Menu button active states */
+[data-sidebar="menu-button"][data-active="true"] {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  font-weight: 500;
+}
+
+/* Hover effects for menu buttons */
+[data-sidebar="menu-button"]:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  transform: translateX(4px);
+}
+
+[data-side="right"] [data-sidebar="menu-button"]:hover {
+  transform: translateX(-4px);
+}
+
+/* Mobile sidebar fixes */
+@media (max-width: 768px) {
+  [data-sidebar="sidebar"] {
+    display: none;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] [data-sidebar="menu-button"]:hover {
+  transform: translateX(-4px);
+}
+
+[dir="rtl"] [data-side="right"] [data-sidebar="menu-button"]:hover {
+  transform: translateX(4px);
+}
+
+/* Smooth transitions for collapsible sidebar */
+.group\/sidebar-wrapper {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Ensure proper spacing when sidebar is collapsed */
+.group-data-\[collapsible\=offcanvas\]\:w-0 {
+  width: 0 !important;
+  overflow: hidden;
+}
+
+/* Icon-only mode styles */
+.group-data-\[collapsible\=icon\] [data-sidebar="menu-button"] span:last-child {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Sidebar header styling */
+[data-sidebar="header"] {
+  border-bottom: 1px solid hsl(var(--border));
+  padding: 1rem;
+}
+
+/* Sidebar content proper scrolling */
+[data-sidebar="content"] {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0.5rem;
+}
+
+/* Menu item spacing */
+[data-sidebar="menu-item"] + [data-sidebar="menu-item"] {
+  margin-top: 0.25rem;
+}
+
+/* Fix for backdrop blur on mobile */
+@media (max-width: 768px) {
+  .sheet-overlay {
+    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.8);
+  }
+}

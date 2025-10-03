@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "analyze": "cross-env ANALYZE=true next build",
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
+    "clean": "rimraf .next out dist build",
+    "clean:all": "rimraf .next out dist build node_modules package-lock.json",
+    "optimize": "next build && next export",
+    "perf": "npm run build && npm run analyze",
+    "db:optimize": "psql -f database-optimization.sql",
+    "project:cleanup": "powershell -ExecutionPolicy Bypass -File cleanup-and-optimize.ps1"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^14.0.0",
+    "cross-env": "^7.0.3",
+    "rimraf": "^5.0.0"
+  }
+}

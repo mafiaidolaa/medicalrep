@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات النظام المتقدمة - EP Group System</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/settings-advanced.css">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="settings-body">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>جاري تحميل الإعدادات...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="settings-header">
+        <div class="container-fluid">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1><i class="fas fa-cogs"></i> إعدادات النظام المتقدمة</h1>
+                    <p class="header-subtitle">لوحة التحكم الشاملة في النظام</p>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span id="currentUserRole" class="user-role">المدير العام</span>
+                        <span id="currentUserName" class="user-name">اسم المستخدم</span>
+                    </div>
+                    <button class="btn-back" onclick="window.history.back()">
+                        <i class="fas fa-arrow-right"></i> العودة
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container-fluid settings-container">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <div class="col-lg-3 col-md-4">
+                <div class="settings-sidebar">
+                    <div class="sidebar-header">
+                        <h3><i class="fas fa-list"></i> أقسام الإعدادات</h3>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <div class="nav-section">
+                            <h4>الإعدادات العامة</h4>
+                            <ul class="nav-list">
+                                <li><a href="#general" class="nav-link active" data-section="general"><i class="fas fa-home"></i> الإعدادات العامة</a></li>
+                                <li><a href="#appearance" class="nav-link" data-section="appearance"><i class="fas fa-palette"></i> المظهر والواجهة</a></li>
+                                <li><a href="#language" class="nav-link" data-section="language"><i class="fas fa-globe"></i> اللغة والمنطقة</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h4>إدارة المستخدمين</h4>
+                            <ul class="nav-list">
+                                <li><a href="#users" class="nav-link" data-section="users"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                                <li><a href="#permissions" class="nav-link" data-section="permissions"><i class="fas fa-shield-alt"></i> الصلاحيات والأدوار</a></li>
+                                <li><a href="#groups" class="nav-link" data-section="groups"><i class="fas fa-users-cog"></i> إدارة المجموعات</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="nav-section">
+                            <h4>الأمان والحماية</h4>
+                            <ul class="nav-list">
+                                <li><a href="#security" class="nav-link" data-section="security"><i class="fas fa-lock"></i> إعدادات الأمان</a></li>
+                                <li><a href="#backup" class="nav-link" data-section="backup"><i class="fas fa-database"></i> النسخ الاحتياطي</a></li>
+                                <li><a href="#logs" class="nav-link" data-section="logs"><i class="fas fa-file-alt"></i> سجلات النظام</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="nav-section">
+                            <h4>الاتصالات والإشعارات</h4>
+                            <ul class="nav-list">
+                                <li><a href="#notifications" class="nav-link" data-section="notifications"><i class="fas fa-bell"></i> الإشعارات</a></li>
+                                <li><a href="#email" class="nav-link" data-section="email"><i class="fas fa-envelope"></i> إعدادات البريد</a></li>
+                                <li><a href="#sms" class="nav-link" data-section="sms"><i class="fas fa-sms"></i> الرسائل النصية</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="nav-section">
+                            <h4>النشاط والخرائط</h4>
+                            <ul class="nav-list">
+                                <li><a href="#activity" class="nav-link" data-section="activity"><i class="fas fa-chart-line"></i> تتبع النشاط</a></li>
+                                <li><a href="#maps" class="nav-link" data-section="maps"><i class="fas fa-map"></i> إعدادات الخرائط</a></li>
+                                <li><a href="#gps" class="nav-link" data-section="gps"><i class="fas fa-map-marker-alt"></i> تتبع GPS</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="nav-section">
+                            <h4>إعدادات متقدمة</h4>
+                            <ul class="nav-list">
+                                <li><a href="#database" class="nav-link" data-section="database"><i class="fas fa-server"></i> قاعدة البيانات</a></li>
+                                <li><a href="#api" class="nav-link" data-section="api"><i class="fas fa-code"></i> إعدادات API</a></li>
+                                <li><a href="#system" class="nav-link" data-section="system"><i class="fas fa-desktop"></i> معلومات النظام</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9 col-md-8">
+                <div class="settings-content">
+                    <!-- General Settings -->
+                    <div id="general-section" class="settings-section active">
+                        <div class="section-header">
+                            <h2><i class="fas fa-home"></i> الإعدادات العامة</h2>
+                            <p>إعدادات النظام الأساسية والمعلومات العامة</p>
+                        </div>
+                        
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-building"></i> معلومات الشركة</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>اسم الشركة</label>
+                                        <input type="text" id="companyName" class="form-control" value="EP Group System">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>وصف الشركة</label>
+                                        <textarea id="companyDescription" class="form-control" rows="3">نظام إدارة متطور للشركات والمؤسسات</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>شعار الشركة</label>
+                                        <div class="logo-upload">
+                                            <input type="file" id="companyLogo" accept="image/*">
+                                            <div class="logo-preview">
+                                                <img src="../assets/images/logo.png" alt="Logo Preview">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-info-circle"></i> معلومات الاتصال</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>رقم الهاتف</label>
+                                        <input type="tel" id="companyPhone" class="form-control" value="+966123456789">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>البريد الإلكتروني</label>
+                                        <input type="email" id="companyEmail" class="form-control" value="info@epgroup.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>العنوان</label>
+                                        <textarea id="companyAddress" class="form-control" rows="2">الرياض، المملكة العربية السعودية</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>الموقع الإلكتروني</label>
+                                        <input type="url" id="companyWebsite" class="form-control" value="https://www.epgroup.com">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Settings -->
+                    <div id="appearance-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-palette"></i> المظهر والواجهة</h2>
+                            <p>تخصيص مظهر النظام والألوان والخطوط</p>
+                        </div>
+
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-paint-brush"></i> الألوان والثيم</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>نمط العرض</label>
+                                        <select id="displayMode" class="form-control">
+                                            <option value="light">فاتح</option>
+                                            <option value="dark">داكن</option>
+                                            <option value="auto">تلقائي</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>اللون الأساسي</label>
+                                        <input type="color" id="primaryColor" class="form-control color-picker" value="#007bff">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>اللون الثانوي</label>
+                                        <input type="color" id="secondaryColor" class="form-control color-picker" value="#6c757d">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>لون النجاح</label>
+                                        <input type="color" id="successColor" class="form-control color-picker" value="#28a745">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>لون التحذير</label>
+                                        <input type="color" id="warningColor" class="form-control color-picker" value="#ffc107">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>لون الخطر</label>
+                                        <input type="color" id="dangerColor" class="form-control color-picker" value="#dc3545">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-font"></i> الخطوط والنصوص</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>الخط الأساسي</label>
+                                        <select id="primaryFont" class="form-control">
+                                            <option value="Cairo">Cairo</option>
+                                            <option value="Tajawal">Tajawal</option>
+                                            <option value="Almarai">Almarai</option>
+                                            <option value="Amiri">Amiri</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>حجم الخط الأساسي</label>
+                                        <input type="range" id="fontSize" class="form-control" min="12" max="20" value="14">
+                                        <span class="range-value">14px</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>تباعد الأسطر</label>
+                                        <input type="range" id="lineHeight" class="form-control" min="1" max="2" step="0.1" value="1.5">
+                                        <span class="range-value">1.5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Management Section -->
+                    <div id="users-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-users"></i> إدارة المستخدمين</h2>
+                            <p>إدارة حسابات المستخدمين وبياناتهم</p>
+                            <button class="btn btn-primary" id="addUserBtn"><i class="fas fa-plus"></i> إضافة مستخدم جديد</button>
+                        </div>
+
+                        <div class="users-management">
+                            <div class="users-filter">
+                                <div class="filter-controls">
+                                    <input type="text" id="userSearch" placeholder="البحث عن مستخدم..." class="form-control">
+                                    <select id="roleFilter" class="form-control">
+                                        <option value="">جميع الأدوار</option>
+                                        <option value="admin">مدير</option>
+                                        <option value="manager">مدير قسم</option>
+                                        <option value="employee">موظف</option>
+                                        <option value="viewer">مشاهد</option>
+                                    </select>
+                                    <select id="statusFilter" class="form-control">
+                                        <option value="">جميع الحالات</option>
+                                        <option value="active">نشط</option>
+                                        <option value="inactive">غير نشط</option>
+                                        <option value="suspended">معلق</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="users-table-container">
+                                <table class="users-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>الصورة</th>
+                                            <th>الاسم</th>
+                                            <th>البريد الإلكتروني</th>
+                                            <th>الدور</th>
+                                            <th>الحالة</th>
+                                            <th>تاريخ الإنضمام</th>
+                                            <th>آخر نشاط</th>
+                                            <th>الإجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTableBody">
+                                        <!-- Users will be loaded dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="pagination-container">
+                                <nav aria-label="صفحات المستخدمين">
+                                    <ul class="pagination" id="usersPagination">
+                                        <!-- Pagination will be generated dynamically -->
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Permissions Management Section -->
+                    <div id="permissions-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-shield-alt"></i> الصلاحيات والأدوار</h2>
+                            <p>إدارة صلاحيات المستخدمين والأدوار</p>
+                            <div class="section-actions">
+                                <button class="btn btn-primary" id="addRoleBtn"><i class="fas fa-plus"></i> إضافة دور جديد</button>
+                                <button class="btn btn-success" id="exportPermissionsBtn"><i class="fas fa-download"></i> تصدير الصلاحيات</button>
+                            </div>
+                        </div>
+
+                        <div class="permissions-management">
+                            <div class="roles-section">
+                                <h3><i class="fas fa-user-tag"></i> الأدوار المتاحة</h3>
+                                <div class="roles-grid" id="rolesGrid">
+                                    <!-- Roles will be loaded dynamically -->
+                                </div>
+                            </div>
+
+                            <div class="permissions-matrix">
+                                <h3><i class="fas fa-table"></i> مصفوفة الصلاحيات</h3>
+                                <div class="matrix-container">
+                                    <table class="permissions-table">
+                                        <thead>
+                                            <tr>
+                                                <th>الصلاحية</th>
+                                                <th>المدير العام</th>
+                                                <th>مدير القسم</th>
+                                                <th>الموظف</th>
+                                                <th>المشاهد</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="permissionsMatrixBody">
+                                            <!-- Permissions matrix will be loaded dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div id="security-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-lock"></i> إعدادات الأمان</h2>
+                            <p>تكوين إعدادات الأمان وحماية النظام</p>
+                        </div>
+
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-key"></i> إعدادات كلمات المرور</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>الحد الأدنى لطول كلمة المرور</label>
+                                        <input type="number" id="minPasswordLength" class="form-control" value="8" min="6" max="20">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="requireUppercase" checked>
+                                                <span class="checkmark"></span>
+                                                يتطلب أحرف كبيرة
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="requireNumbers" checked>
+                                                <span class="checkmark"></span>
+                                                يتطلب أرقام
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="requireSpecialChars" checked>
+                                                <span class="checkmark"></span>
+                                                يتطلب رموز خاصة
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>مدة انتهاء كلمة المرور (بالأيام)</label>
+                                        <input type="number" id="passwordExpiry" class="form-control" value="90" min="30" max="365">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-shield-virus"></i> حماية تسجيل الدخول</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>عدد المحاولات المسموحة</label>
+                                        <input type="number" id="maxLoginAttempts" class="form-control" value="5" min="3" max="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>مدة الحظر (بالدقائق)</label>
+                                        <input type="number" id="lockoutDuration" class="form-control" value="15" min="5" max="60">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="enableTwoFactor" checked>
+                                                <span class="checkmark"></span>
+                                                تفعيل المصادقة الثنائية
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="enableCaptcha" checked>
+                                                <span class="checkmark"></span>
+                                                تفعيل كود التحقق (CAPTCHA)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-user-clock"></i> إعدادات الجلسات</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>مدة الجلسة (بالساعات)</label>
+                                        <input type="number" id="sessionDuration" class="form-control" value="8" min="1" max="24">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>مهلة عدم النشاط (بالدقائق)</label>
+                                        <input type="number" id="inactivityTimeout" class="form-control" value="30" min="5" max="120">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="forceLogoutMultiple">
+                                                <span class="checkmark"></span>
+                                                منع تسجيل الدخول المتعدد
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Monitoring Section -->
+                    <div id="activity-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-chart-line"></i> تتبع النشاط</h2>
+                            <p>مراقبة وتتبع أنشطة المستخدمين في النظام</p>
+                        </div>
+
+                        <div class="activity-dashboard">
+                            <div class="activity-stats">
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3 id="activeUsersCount">0</h3>
+                                        <p>مستخدمين نشطين</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3 id="totalSessionsCount">0</h3>
+                                        <p>جلسات اليوم</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-mouse-pointer"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3 id="totalActionsCount">0</h3>
+                                        <p>العمليات المنجزة</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h3 id="errorCount">0</h3>
+                                        <p>أخطاء النظام</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-charts">
+                                <div class="chart-container">
+                                    <h3><i class="fas fa-chart-area"></i> نشاط المستخدمين خلال الأسبوع</h3>
+                                    <canvas id="activityChart" width="400" height="200"></canvas>
+                                </div>
+                                <div class="chart-container">
+                                    <h3><i class="fas fa-chart-pie"></i> توزيع الأنشطة حسب النوع</h3>
+                                    <canvas id="activityTypeChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="activity-settings">
+                                <div class="setting-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-cog"></i> إعدادات المراقبة</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <div class="checkbox-group">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" id="trackPageViews" checked>
+                                                    <span class="checkmark"></span>
+                                                    تتبع زيارات الصفحات
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox-group">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" id="trackUserActions" checked>
+                                                    <span class="checkmark"></span>
+                                                    تتبع أفعال المستخدمين
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox-group">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" id="trackLoginHistory" checked>
+                                                    <span class="checkmark"></span>
+                                                    تتبع تاريخ تسجيل الدخول
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>مدة الاحتفاظ بالسجلات (بالأيام)</label>
+                                            <input type="number" id="logRetentionPeriod" class="form-control" value="365" min="30" max="1095">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maps Settings Section -->
+                    <div id="maps-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-map"></i> إعدادات الخرائط</h2>
+                            <p>تكوين خرائط النظام وإعدادات الموقع</p>
+                        </div>
+
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-map-marked"></i> مزود الخرائط</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>نوع الخريطة</label>
+                                        <select id="mapProvider" class="form-control">
+                                            <option value="google">Google Maps</option>
+                                            <option value="openstreet">OpenStreetMap</option>
+                                            <option value="mapbox">Mapbox</option>
+                                            <option value="bing">Bing Maps</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>مفتاح API</label>
+                                        <input type="password" id="mapApiKey" class="form-control" placeholder="أدخل مفتاح API">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>نمط الخريطة الافتراضي</label>
+                                        <select id="defaultMapStyle" class="form-control">
+                                            <option value="roadmap">عادية</option>
+                                            <option value="satellite">القمر الصناعي</option>
+                                            <option value="hybrid">مختلطة</option>
+                                            <option value="terrain">التضاريس</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-crosshairs"></i> الموقع الافتراضي</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>خط العرض</label>
+                                        <input type="number" id="defaultLatitude" class="form-control" value="24.7136" step="any">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>خط الطول</label>
+                                        <input type="number" id="defaultLongitude" class="form-control" value="46.6753" step="any">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>مستوى التكبير الافتراضي</label>
+                                        <input type="range" id="defaultZoom" class="form-control" min="1" max="20" value="10">
+                                        <span class="range-value">10</span>
+                                    </div>
+                                    <div class="map-preview" id="mapPreview">
+                                        <div class="preview-placeholder">
+                                            <i class="fas fa-map"></i>
+                                            <p>معاينة الخريطة</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-layer-group"></i> طبقات الخريطة</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="showTrafficLayer" checked>
+                                                <span class="checkmark"></span>
+                                                إظهار طبقة الحركة المرورية
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="showTransitLayer">
+                                                <span class="checkmark"></span>
+                                                إظهار طبقة وسائل النقل
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="showBicyclingLayer">
+                                                <span class="checkmark"></span>
+                                                إظهار مسارات الدراجات
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" id="enableStreetView" checked>
+                                                <span class="checkmark"></span>
+                                                تفعيل عرض الشارع
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Settings -->
+                    <div id="notifications-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-bell"></i> الإشعارات</h2>
+                            <p>إدارة إعدادات الإشعارات والتنبيهات</p>
+                        </div>
+
+                        <div class="notifications-management">
+                            <div class="notification-types">
+                                <div class="setting-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-toggle-on"></i> أنواع الإشعارات</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="notification-item">
+                                            <div class="notification-info">
+                                                <h4>إشعارات النظام</h4>
+                                                <p>تحديثات وصيانة النظام</p>
+                                            </div>
+                                            <div class="notification-controls">
+                                                <label class="switch">
+                                                    <input type="checkbox" id="systemNotifications" checked>
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="notification-item">
+                                            <div class="notification-info">
+                                                <h4>إشعارات الأمان</h4>
+                                                <p>تسجيل دخول مشبوه ومحاولات اختراق</p>
+                                            </div>
+                                            <div class="notification-controls">
+                                                <label class="switch">
+                                                    <input type="checkbox" id="securityNotifications" checked>
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="notification-item">
+                                            <div class="notification-info">
+                                                <h4>إشعارات المستخدمين</h4>
+                                                <p>تسجيل مستخدمين جدد وتحديث البيانات</p>
+                                            </div>
+                                            <div class="notification-controls">
+                                                <label class="switch">
+                                                    <input type="checkbox" id="userNotifications" checked>
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="notification-item">
+                                            <div class="notification-info">
+                                                <h4>إشعارات النسخ الاحتياطي</h4>
+                                                <p>حالة النسخ الاحتياطي والاستعادة</p>
+                                            </div>
+                                            <div class="notification-controls">
+                                                <label class="switch">
+                                                    <input type="checkbox" id="backupNotifications" checked>
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="notification-settings">
+                                <div class="setting-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-cog"></i> إعدادات الإشعارات</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>طريقة الإشعار الافتراضية</label>
+                                            <select id="defaultNotificationMethod" class="form-control">
+                                                <option value="email">بريد إلكتروني</option>
+                                                <option value="sms">رسالة نصية</option>
+                                                <option value="push">إشعار فوري</option>
+                                                <option value="all">جميع الطرق</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>مستوى الأولوية للإشعارات</label>
+                                            <select id="notificationPriority" class="form-control">
+                                                <option value="low">منخفض</option>
+                                                <option value="normal">عادي</option>
+                                                <option value="high">عالي</option>
+                                                <option value="critical">حرج</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox-group">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" id="enableSoundNotifications" checked>
+                                                    <span class="checkmark"></span>
+                                                    تفعيل الصوت للإشعارات
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox-group">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" id="enableDesktopNotifications" checked>
+                                                    <span class="checkmark"></span>
+                                                    إشعارات سطح المكتب
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backup Settings -->
+                    <div id="backup-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-database"></i> النسخ الاحتياطي</h2>
+                            <p>إدارة النسخ الاحتياطي واستعادة البيانات</p>
+                        </div>
+
+                        <div class="backup-management">
+                            <div class="backup-status">
+                                <div class="status-card">
+                                    <div class="status-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="status-info">
+                                        <h3>آخر نسخة احتياطية</h3>
+                                        <p id="lastBackupDate">2024-01-15 14:30</p>
+                                        <span class="status-badge success">نجحت</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="status-card">
+                                    <div class="status-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="status-info">
+                                        <h3>النسخة القادمة</h3>
+                                        <p id="nextBackupDate">2024-01-16 02:00</p>
+                                        <span class="status-badge pending">مجدولة</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="status-card">
+                                    <div class="status-icon">
+                                        <i class="fas fa-hdd"></i>
+                                    </div>
+                                    <div class="status-info">
+                                        <h3>حجم النسخ الاحتياطي</h3>
+                                        <p id="backupSize">2.5 GB</p>
+                                        <span class="status-badge info">إجمالي</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="backup-actions">
+                                <button class="btn btn-primary" id="createBackupBtn">
+                                    <i class="fas fa-plus"></i> إنشاء نسخة احتياطية الآن
+                                </button>
+                                <button class="btn btn-success" id="downloadBackupBtn">
+                                    <i class="fas fa-download"></i> تحميل آخر نسخة
+                                </button>
+                                <button class="btn btn-warning" id="restoreBackupBtn">
+                                    <i class="fas fa-upload"></i> استعادة من نسخة احتياطية
+                                </button>
+                                <button class="btn btn-danger" id="deleteOldBackupsBtn">
+                                    <i class="fas fa-trash"></i> حذف النسخ القديمة
+                                </button>
+                            </div>
+
+                            <div class="settings-grid">
+                                <div class="setting-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-calendar-alt"></i> الجدولة التلقائية</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <div class="checkbox-group">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" id="enableAutoBackup" checked>
+                                                    <span class="checkmark"></span>
+                                                    تفعيل النسخ الاحتياطي التلقائي
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>تكرار النسخ الاحتياطي</label>
+                                            <select id="backupFrequency" class="form-control">
+                                                <option value="daily">يومي</option>
+                                                <option value="weekly">أسبوعي</option>
+                                                <option value="monthly">شهري</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>وقت النسخ الاحتياطي</label>
+                                            <input type="time" id="backupTime" class="form-control" value="02:00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>عدد النسخ المحفوظة</label>
+                                            <input type="number" id="maxBackupCount" class="form-control" value="10" min="1" max="50">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="setting-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-cloud"></i> التخزين السحابي</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <div class="checkbox-group">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" id="enableCloudBackup">
+                                                    <span class="checkmark"></span>
+                                                    تفعيل النسخ على السحابة
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>مزود الخدمة السحابية</label>
+                                            <select id="cloudProvider" class="form-control">
+                                                <option value="aws">Amazon AWS</option>
+                                                <option value="google">Google Drive</option>
+                                                <option value="dropbox">Dropbox</option>
+                                                <option value="onedrive">OneDrive</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>مفتاح الوصول</label>
+                                            <input type="password" id="cloudAccessKey" class="form-control" placeholder="مفتاح الوصول للخدمة السحابية">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>مجلد التخزين</label>
+                                            <input type="text" id="cloudStoragePath" class="form-control" placeholder="/backups/ep-group-system">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="backup-history">
+                                <h3><i class="fas fa-history"></i> سجل النسخ الاحتياطي</h3>
+                                <div class="backup-table-container">
+                                    <table class="backup-table">
+                                        <thead>
+                                            <tr>
+                                                <th>التاريخ</th>
+                                                <th>الوقت</th>
+                                                <th>الحجم</th>
+                                                <th>النوع</th>
+                                                <th>الحالة</th>
+                                                <th>الإجراءات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="backupHistoryBody">
+                                            <!-- Backup history will be loaded dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Information -->
+                    <div id="system-section" class="settings-section">
+                        <div class="section-header">
+                            <h2><i class="fas fa-desktop"></i> معلومات النظام</h2>
+                            <p>معلومات تفصيلية عن حالة النظام والخادم</p>
+                        </div>
+
+                        <div class="system-info">
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-server"></i> معلومات الخادم</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="info-item">
+                                            <span class="label">نظام التشغيل:</span>
+                                            <span class="value" id="serverOS">Windows Server 2019</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">إصدار PHP:</span>
+                                            <span class="value" id="phpVersion">8.2.0</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">خادم الويب:</span>
+                                            <span class="value" id="webServer">Apache/2.4.54</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">قاعدة البيانات:</span>
+                                            <span class="value" id="database">MySQL 8.0.30</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">مساحة القرص:</span>
+                                            <span class="value" id="diskSpace">500 GB متاح من أصل 1 TB</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-chart-area"></i> استخدام الموارد</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="resource-item">
+                                            <div class="resource-label">استخدام المعالج</div>
+                                            <div class="resource-bar">
+                                                <div class="progress-bar" style="width: 35%"></div>
+                                            </div>
+                                            <div class="resource-value">35%</div>
+                                        </div>
+                                        
+                                        <div class="resource-item">
+                                            <div class="resource-label">استخدام الذاكرة</div>
+                                            <div class="resource-bar">
+                                                <div class="progress-bar" style="width: 68%"></div>
+                                            </div>
+                                            <div class="resource-value">68%</div>
+                                        </div>
+                                        
+                                        <div class="resource-item">
+                                            <div class="resource-label">استخدام القرص</div>
+                                            <div class="resource-bar">
+                                                <div class="progress-bar" style="width: 50%"></div>
+                                            </div>
+                                            <div class="resource-value">50%</div>
+                                        </div>
+                                        
+                                        <div class="resource-item">
+                                            <div class="resource-label">سرعة الشبكة</div>
+                                            <div class="resource-bar">
+                                                <div class="progress-bar" style="width: 85%"></div>
+                                            </div>
+                                            <div class="resource-value">85 Mbps</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-code-branch"></i> معلومات النظام</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="info-item">
+                                            <span class="label">اسم النظام:</span>
+                                            <span class="value">EP Group System</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">الإصدار:</span>
+                                            <span class="value">v2.1.0</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">تاريخ الإصدار:</span>
+                                            <span class="value">2024-01-15</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">آخر تحديث:</span>
+                                            <span class="value">2024-01-10</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">الترخيص:</span>
+                                            <span class="value">Commercial License</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-card">
+                                    <div class="card-header">
+                                        <h3><i class="fas fa-tools"></i> إجراءات الصيانة</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <button class="btn btn-outline-primary btn-block" id="clearCacheBtn">
+                                            <i class="fas fa-broom"></i> مسح التخزين المؤقت
+                                        </button>
+                                        <button class="btn btn-outline-success btn-block" id="optimizeDbBtn">
+                                            <i class="fas fa-database"></i> تحسين قاعدة البيانات
+                                        </button>
+                                        <button class="btn btn-outline-warning btn-block" id="checkUpdatesBtn">
+                                            <i class="fas fa-sync-alt"></i> البحث عن تحديثات
+                                        </button>
+                                        <button class="btn btn-outline-info btn-block" id="systemHealthBtn">
+                                            <i class="fas fa-heartbeat"></i> فحص صحة النظام
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="save-settings-bar">
+        <div class="container-fluid">
+            <div class="save-actions">
+                <button class="btn btn-success btn-lg" id="saveAllSettings">
+                    <i class="fas fa-save"></i> حفظ جميع الإعدادات
+                </button>
+                <button class="btn btn-secondary btn-lg" id="resetSettings">
+                    <i class="fas fa-undo"></i> إعادة تعيين
+                </button>
+                <button class="btn btn-info btn-lg" id="exportSettings">
+                    <i class="fas fa-download"></i> تصدير الإعدادات
+                </button>
+                <button class="btn btn-warning btn-lg" id="importSettings">
+                    <i class="fas fa-upload"></i> استيراد الإعدادات
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>الاسم الأول</label>
+                                    <input type="text" class="form-control" name="firstName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>الاسم الأخير</label>
+                                    <input type="text" class="form-control" name="lastName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>البريد الإلكتروني</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهاتف</label>
+                            <input type="tel" class="form-control" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label>الدور</label>
+                            <select class="form-control" name="role" required>
+                                <option value="">اختر الدور</option>
+                                <option value="admin">مدير</option>
+                                <option value="manager">مدير قسم</option>
+                                <option value="employee">موظف</option>
+                                <option value="viewer">مشاهد</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>كلمة المرور</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>تأكيد كلمة المرور</label>
+                            <input type="password" class="form-control" name="confirmPassword" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveUserBtn">حفظ المستخدم</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container">
+        <div id="successToast" class="toast success-toast">
+            <div class="toast-content">
+                <i class="fas fa-check-circle"></i>
+                <span class="toast-message">تم الحفظ بنجاح!</span>
+            </div>
+        </div>
+        <div id="errorToast" class="toast error-toast">
+            <div class="toast-content">
+                <i class="fas fa-exclamation-circle"></i>
+                <span class="toast-message">حدث خطأ!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/chart.js"></script>
+    <script src="../assets/js/settings-advanced.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+export async function POST(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const jobType = searchParams.get('job') || 'all';
+    const authHeader = request.headers.get('authorization');
+    
+    // التحقق من المفتاح السري للـ Cron Jobs
+    if (!authHeader || authHeader !== `Bearer ${process.env.CRON_SECRET_KEY}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const results: any = {};
+
+    // تشغيل جميع المهام أو مهمة محددة
+    if (jobType === 'all' || jobType === 'plans') {
+      try {
+        await supabase.rpc('create_plan_reminders');
+        results.planReminders = 'completed';
+      } catch (error) {
+        console.error('Error in plan reminders:', error);
+        results.planReminders = 'failed';
+      }
+    }
+
+    if (jobType === 'all' || jobType === 'invoices') {
+      try {
+        await supabase.rpc('create_invoice_reminders');
+        results.invoiceReminders = 'completed';
+      } catch (error) {
+        console.error('Error in invoice reminders:', error);
+        results.invoiceReminders = 'failed';
+      }
+    }
+
+    if (jobType === 'all' || jobType === 'cleanup') {
+      try {
+        const { data: expiredCount } = await supabase.rpc('cleanup_expired_notifications');
+        const { data: oldCount } = await supabase.rpc('cleanup_old_notifications');
+        results.cleanup = {
+          expiredDeleted: expiredCount || 0,
+          oldDeleted: oldCount || 0,
+          status: 'completed'
+        };
+      } catch (error) {
+        console.error('Error in cleanup:', error);
+        results.cleanup = 'failed';
+      }
+    }
+
+    // إحصائيات الإشعارات الجديدة
+    if (jobType === 'all' || jobType === 'stats') {
+      try {
+        const { data: todayNotifications } = await supabase
+          .from('notifications')
+          .select('id, type, priority')
+          .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+
+        results.stats = {
+          todayTotal: todayNotifications?.length || 0,
+          byType: todayNotifications?.reduce((acc: any, notification: any) => {
+            acc[notification.type] = (acc[notification.type] || 0) + 1;
+            return acc;
+          }, {}) || {},
+          timestamp: new Date().toISOString()
+        };
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+        results.stats = 'failed';
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      executedAt: new Date().toISOString(),
+      jobType,
+      results
+    });
+
+  } catch (error) {
+    console.error('Error in notifications cron:', error);
+    return NextResponse.json({ 
+      success: false, 
+      error: 'Internal server error',
+      timestamp: new Date().toISOString()
+    }, { status: 500 });
+  }
+}
+
+// للاختبار اليدوي (GET)
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const test = searchParams.get('test');
+    
+    if (test !== 'true') {
+      return NextResponse.json({ 
+        error: 'Test mode only. Add ?test=true to run.' 
+      }, { status: 400 });
+    }
+
+    // تشغيل تجريبي للمهام
+    const results: any = {
+      testMode: true,
+      timestamp: new Date().toISOString()
+    };
+
+    // فحص الخطط المستحقة اليوم
+    const { data: todayPlans } = await supabase
+      .from('rep_plans')
+      .select('id, rep_id, visit_purpose, notification_sent')
+      .eq('plan_date', new Date().toISOString().split('T')[0])
+      .eq('status', 'planned');
+
+    results.todayPlans = {
+      total: todayPlans?.length || 0,
+      notificationsSent: todayPlans?.filter((p: any) => p.notification_sent).length || 0,
+      pendingNotifications: todayPlans?.filter((p: any) => !p.notification_sent).length || 0
+    };
+
+    // فحص الفواتير المستحقة
+    const { data: dueInvoices } = await supabase
+      .from('pending_invoices')
+      .select('id, invoice_number, due_date, amount, reminder_sent')
+      .lte('due_date', new Date().toISOString().split('T')[0])
+      .in('status', ['pending', 'partially_paid']);
+
+    results.dueInvoices = {
+      total: dueInvoices?.length || 0,
+      remindersSent: dueInvoices?.filter((i: any) => i.reminder_sent).length || 0,
+      pendingReminders: dueInvoices?.filter((i: any) => !i.reminder_sent).length || 0
+    };
+
+    // إحصائيات الإشعارات الحديثة
+    const { data: recentNotifications } = await supabase
+      .from('notifications')
+      .select('type, priority, auto_generated')
+      .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+
+    results.recentNotifications = {
+      total: recentNotifications?.length || 0,
+      autoGenerated: recentNotifications?.filter((n: any) => n.auto_generated).length || 0,
+      manual: recentNotifications?.filter((n: any) => !n.auto_generated).length || 0
+    };
+
+    return NextResponse.json(results);
+
+  } catch (error) {
+    console.error('Error in notifications cron test:', error);
+    return NextResponse.json({ 
+      error: 'Internal server error',
+      timestamp: new Date().toISOString() 
+    }, { status: 500 });
+  }
+}

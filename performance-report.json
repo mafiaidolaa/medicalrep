@@ -1,0 +1,47 @@
+{
+  "score": 50,
+  "system": {
+    "platform": "win32",
+    "arch": "x64",
+    "cpuCount": 8,
+    "cpuModel": "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+    "totalMemoryGB": 7.9,
+    "freeMemoryGB": 1.07,
+    "usedMemoryPercent": 87
+  },
+  "memory": {
+    "rss": 48,
+    "heapUsed": 4,
+    "heapTotal": 6,
+    "external": 2,
+    "heapLimit": 2096,
+    "heapAvailable": 2092
+  },
+  "bundle": {
+    "totalDependencies": 53,
+    "heavyDependencies": 22,
+    "estimatedBundleSize": 84,
+    "breakdown": {
+      "recharts": 12,
+      "@radix-ui": 42,
+      "next": 25,
+      "react": 5
+    },
+    "recommendations": [
+      {
+        "priority": "MEDIUM",
+        "action": "Consider lighter chart library",
+        "savings": "~12MB",
+        "reason": "Recharts is heavy for simple charts"
+      },
+      {
+        "priority": "MEDIUM",
+        "action": "Optimize Radix UI imports",
+        "savings": "~11MB",
+        "reason": "Too many UI components imported"
+      }
+    ]
+  },
+  "timestamp": "2025-09-29T07:31:07.314Z",
+  "runtime": 16
+}

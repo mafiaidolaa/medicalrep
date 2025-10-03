@@ -1,0 +1,186 @@
+{
+  "name": "نظام EP Group الشامل",
+  "short_name": "EP System",
+  "description": "نظام إدارة شامل - العيادات، المحاسبة، المستخدمين، والمبيعات مع دعم الموبايل الكامل",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "lang": "ar",
+  "dir": "rtl",
+  "scope": "/",
+  "id": "ep-group-expenses-system",
+  "categories": ["business", "finance", "productivity"],
+  "prefer_related_applications": false,
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "لوحة التحكم",
+      "short_name": "الرئيسية",
+      "description": "العودة للصفحة الرئيسية ولوحة التحكم",
+      "url": "/",
+      "icons": [{"src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png"}]
+    },
+    {
+      "name": "العيادات",
+      "short_name": "العيادات",
+      "description": "إدارة العيادات والزيارات والمرضى",
+      "url": "/clinics",
+      "icons": [{"src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png"}]
+    },
+    {
+      "name": "المحاسبة",
+      "short_name": "المحاسبة",
+      "description": "إدارة الحسابات والفواتير والمدفوعات",
+      "url": "/accounting",
+      "icons": [{"src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png"}]
+    },
+    {
+      "name": "المستخدمين",
+      "short_name": "المستخدمين",
+      "description": "إدارة المستخدمين والصلاحيات",
+      "url": "/users",
+      "icons": [{"src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png"}]
+    },
+    {
+      "name": "المخزون",
+      "short_name": "المخزون",
+      "description": "إدارة المخزون والمنتجات",
+      "url": "/stock",
+      "icons": [{"src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png"}]
+    },
+    {
+      "name": "الطلبات",
+      "short_name": "الطلبات",
+      "description": "إدارة الطلبات والمبيعات",
+      "url": "/orders",
+      "icons": [{"src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png"}]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-dashboard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "لوحة المعلومات الرئيسية"
+    },
+    {
+      "src": "/screenshots/desktop-expenses.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "صفحة إدارة المصروفات"
+    },
+    {
+      "src": "/screenshots/desktop-reports.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "التقارير والإحصائيات"
+    },
+    {
+      "src": "/screenshots/mobile-dashboard.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "الشاشة الرئيسية للجوال"
+    },
+    {
+      "src": "/screenshots/mobile-new-expense.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "إضافة مصروفات جديدة"
+    },
+    {
+      "src": "/screenshots/mobile-offline.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "وضع العمل بدون اتصال"
+    }
+  ],
+  "iarc_rating_id": "",
+  "protocol_handlers": [
+    {
+      "protocol": "web+expense",
+      "url": "/accounts/expenses/new?url=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/accounts/expenses/import",
+      "accept": {
+        "text/csv": [".csv"],
+        "application/vnd.ms-excel": [".xls"],
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"]
+      }
+    }
+  ],
+  "related_applications": [],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "scope_extensions": [
+    {
+      "origin": "*.epgroup.com"
+    }
+  ],
+  "handle_links": "preferred",
+  "capture_links": "existing-client-navigate"
+}

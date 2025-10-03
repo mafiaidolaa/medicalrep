@@ -1,0 +1,76 @@
+{
+  "compilerOptions": {
+    // Enhanced target and lib for better performance
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    
+    // Balanced strictness for stability
+    "strict": true,
+    "noUncheckedIndexedAccess": false,
+    "exactOptionalPropertyTypes": false,
+    
+    // Performance optimizations
+    "noEmit": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    // Module resolution
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+    
+    // JSX optimization
+    "jsx": "preserve",
+    "jsxImportSource": "react",
+    
+    // Build performance
+    "incremental": true,
+    "tsBuildInfoFile": ".next/.tsbuildinfo",
+    
+    // Plugins and paths
+    "plugins": [{"name": "next"}],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/types/*": ["./src/types/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts",
+    "instrumentation.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out",
+    "dist",
+    "examples",
+    "docs",
+    "reports",
+    "project-backup",
+    "data",
+    "db",
+    "database",
+    "migrations",
+    "android",
+    "ios",
+    "scripts",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ],
+  "ts-node": {
+    "esm": true
+  }
+}

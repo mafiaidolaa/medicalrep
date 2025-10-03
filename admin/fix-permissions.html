@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إصلاح الصلاحيات - EP Group System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 40px;
+            color: white;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .message {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .current-status {
+            background: #e3f2fd;
+            border: 2px solid #bbdefb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: right;
+        }
+
+        .current-status h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            🔒
+        </div>
+        
+        <h1>إصلاح صلاحيات النظام</h1>
+        
+        <div class="message">
+            <strong>مرحباً!</strong><br>
+            يبدو أن هناك مشكلة في صلاحيات الوصول لإعدادات النظام. 
+            لا تقلق، يمكننا إصلاح هذه المشكلة بسهولة.
+        </div>
+
+        <div class="current-status" id="statusDisplay">
+            <h3>حالة النظام الحالية</h3>
+            <div id="statusContent">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>جاري فحص النظام...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-grid">
+            <button class="btn" onclick="checkCurrentStatus()">
+                🔍 فحص الحالة
+            </button>
+            
+            <button class="btn" onclick="fixPermissions()">
+                🔧 إصلاح الصلاحيات
+            </button>
+            
+            <button class="btn" onclick="loginAsAdmin()">
+                👤 دخول كمدير
+            </button>
+            
+            <button class="btn" onclick="resetAllPermissions()">
+                🔄 إعادة تعيين كامل
+            </button>
+        </div>
+
+        <div id="result"></div>
+
+        <div class="actions-grid">
+            <button class="btn" onclick="goToSettings()" id="settingsBtn" style="background: #28a745;">
+                ⚙️ الذهاب للإعدادات
+            </button>
+        </div>
+
+        <div class="footer">
+            <p><strong>EP Group System v2.1.0</strong></p>
+            <p>إذا واجهتك مشاكل، يرجى التواصل مع فريق الدعم الفني</p>
+        </div>
+    </div>
+
+    <script>
+        // فحص حالة النظام
+        async function checkCurrentStatus() {
+            showLoading();
+            
+            try {
+                const response = await fetch('permissions-manager.php?action=check-access');
+                const data = await response.json();
+                
+                const statusHtml = `
+                    <div class="status-item">
+                        <span><strong>حالة الوصول:</strong></span>
+                        <span style="color: ${data.data.has_access ? '#28a745' : '#dc3545'}">
+                            ${data.data.has_access ? '✅ مسموح' : '❌ مرفوض'}
+                        </span>
+                    </div>
+                    <div class="status-item">
+                        <span><strong>المستخدم الحالي:</strong></span>
+                        <span>${data.data.current_user ? data.data.current_user.name : 'غير مسجل'}</span>
+                    </div>
+                    <div class="status-item">
+                        <span><strong>الدور:</strong></span>
+                        <span>${data.data.current_user ? data.data.current_user.role_name : 'غير محدد'}</span>
+                    </div>
+                    <div class="status-item">
+                        <span><strong>الصلاحية المطلوبة:</strong></span>
+                        <span>${data.data.required_permission}</span>
+                    </div>
+                `;
+                
+                document.getElementById('statusContent').innerHTML = statusHtml;
+                
+            } catch (error) {
+                showError('فشل في فحص النظام: ' + error.message);
+            }
+        }
+
+        // إصلاح الصلاحيات
+        async function fixPermissions() {
+            showLoading('جاري إصلاح الصلاحيات...');
+            
+            try {
+                const response = await fetch('permissions-manager.php?action=fix-permissions', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showSuccess('تم إصلاح الصلاحيات بنجاح! تم تحديث ' + (data.data.affected_users || 0) + ' مستخدم.');
+                    setTimeout(() => {
+                        checkCurrentStatus();
+                    }, 2000);
+                } else {
+                    showError(data.error || 'فشل في إصلاح الصلاحيات');
+                }
+                
+            } catch (error) {
+                showError('خطأ في الاتصال: ' + error.message);
+            }
+        }
+
+        // تسجيل الدخول كمدير
+        async function loginAsAdmin() {
+            showLoading('جاري تسجيل الدخول...');
+            
+            try {
+                const response = await fetch('permissions-manager.php?action=login-as-admin', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showSuccess('تم تسجيل الدخول كمدير بنجاح!');
+                    setTimeout(() => {
+                        checkCurrentStatus();
+                    }, 2000);
+                } else {
+                    showError(data.error || 'فشل في تسجيل الدخول');
+                }
+                
+            } catch (error) {
+                showError('خطأ في الاتصال: ' + error.message);
+            }
+        }
+
+        // إعادة تعيين جميع الصلاحيات
+        async function resetAllPermissions() {
+            if (!confirm('هل أنت متأكد من إعادة تعيين جميع الصلاحيات؟ سيتم حذف جميع البيانات الحالية.')) {
+                return;
+            }
+            
+            showLoading('جاري إعادة التعيين...');
+            
+            try {
+                const response = await fetch('permissions-manager.php?action=reset-permissions', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showSuccess('تم إعادة تعيين الصلاحيات بنجاح!');
+                    setTimeout(() => {
+                        checkCurrentStatus();
+                    }, 2000);
+                } else {
+                    showError(data.error || 'فشل في إعادة التعيين');
+                }
+                
+            } catch (error) {
+                showError('خطأ في الاتصال: ' + error.message);
+            }
+        }
+
+        // الذهاب لصفحة الإعدادات
+        function goToSettings() {
+            window.location.href = 'settings.html';
+        }
+
+        // عرض رسالة التحميل
+        function showLoading(message = 'جاري المعالجة...') {
+            document.getElementById('result').innerHTML = `
+                <div class="loading" style="display: block;">
+                    <div class="spinner"></div>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // عرض رسالة نجاح
+        function showSuccess(message) {
+            document.getElementById('result').innerHTML = `
+                <div class="message success">
+                    <strong>✅ نجح!</strong><br>
+                    ${message}
+                </div>
+            `;
+        }
+
+        // عرض رسالة خطأ
+        function showError(message) {
+            document.getElementById('result').innerHTML = `
+                <div class="message error">
+                    <strong>❌ خطأ!</strong><br>
+                    ${message}
+                </div>
+            `;
+        }
+
+        // فحص الحالة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            checkCurrentStatus();
+        });
+    </script>
+</body>
+</html>

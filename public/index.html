@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Title and Description -->
+  <title>نظام EP Group الشامل</title>
+  <meta name="description" content="نظام إدارة شامل - العيادات، المحاسبة، المستخدمين، والمبيعات">
+  <meta name="keywords" content="إدارة, عيادات, محاسبة, مبيعات, نظام">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="EP System">
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Icons -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-192x192.png">
+  
+  <!-- Splash Screens for iOS -->
+  <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png">
+  
+  <!-- Microsoft -->
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+  
+  <!-- Security -->
+  <meta http-equiv="Content-Security-Policy" 
+        content="default-src 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; 
+                 img-src 'self' data: blob: https:; 
+                 connect-src 'self' https: wss: ws:;">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      direction: rtl;
+    }
+    
+    .container {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 20px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #2563eb;
+      font-weight: bold;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: white;
+      width: 0%;
+      border-radius: 2px;
+      animation: progress 3s ease-in-out infinite;
+    }
+    
+    @keyframes progress {
+      0% { width: 0%; }
+      50% { width: 70%; }
+      100% { width: 100%; }
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    
+    .feature {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+    
+    .feature-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    .manual-redirect {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .redirect-button {
+      background: white;
+      color: #2563eb;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .redirect-button:hover {
+      background: #f1f5f9;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">EP</div>
+    <h1>نظام EP Group</h1>
+    <p>نظام إدارة شامل للعيادات والمحاسبة والمبيعات</p>
+    
+    <div class="loading">
+      <div class="spinner"></div>
+      <span>جاري تحميل النظام...</span>
+    </div>
+    
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+    
+    <div class="features">
+      <div class="feature">
+        <span class="feature-icon">🏥</span>
+        العيادات
+      </div>
+      <div class="feature">
+        <span class="feature-icon">💰</span>
+        المحاسبة
+      </div>
+      <div class="feature">
+        <span class="feature-icon">👥</span>
+        المستخدمين
+      </div>
+      <div class="feature">
+        <span class="feature-icon">📦</span>
+        المخزون
+      </div>
+    </div>
+    
+    <div class="manual-redirect">
+      <p style="font-size: 0.9rem; margin-bottom: 1rem;">إذا لم يتم التحميل تلقائياً:</p>
+      <a href="/" class="redirect-button" onclick="redirectToApp()">
+        دخول النظام
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Auto redirect to Next.js app
+    let redirectAttempts = 0;
+    const maxRedirectAttempts = 3;
+    
+    function redirectToApp() {
+      if (window.location.pathname === '/' && window.location.search === '') {
+        // We're already on the main page, try to load the Next.js app
+        window.location.reload();
+      } else {
+        // Redirect to root
+        window.location.href = '/';
+      }
+    }
+    
+    // Try to detect if Next.js is loaded
+    function checkNextJSLoaded() {
+      // Check for Next.js specific elements or globals
+      if (window.next || document.querySelector('[data-nextjs-scroll-focus-boundary]')) {
+        return true;
+      }
+      return false;
+    }
+    
+    // Auto redirect after loading
+    setTimeout(() => {
+      if (!checkNextJSLoaded() && redirectAttempts < maxRedirectAttempts) {
+        redirectAttempts++;
+        redirectToApp();
+      }
+    }, 3000);
+    
+    // Service Worker registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered: ', registration);
+          })
+          .catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+    
+    // PWA install prompt
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Show custom install button if needed
+      console.log('PWA install prompt available');
+    });
+    
+    // Handle app installed
+    window.addEventListener('appinstalled', (e) => {
+      console.log('PWA installed successfully');
+    });
+    
+    // Network status
+    function updateOnlineStatus() {
+      if (navigator.onLine) {
+        document.body.style.filter = 'none';
+      } else {
+        document.body.style.filter = 'grayscale(1)';
+      }
+    }
+    
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+    
+    // Mobile optimizations
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      document.body.style.fontSize = '16px'; // Prevent zoom on iOS
+    }
+  </script>
+</body>
+</html>

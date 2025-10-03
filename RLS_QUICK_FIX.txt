@@ -1,0 +1,50 @@
+═══════════════════════════════════════════════════════════════
+            🔒 RLS FIX - QUICK REFERENCE
+═══════════════════════════════════════════════════════════════
+
+PROBLEM:
+  Error: new row violates row-level security policy
+
+SOLUTION: (2 MINUTES)
+
+1. Go to Supabase SQL Editor:
+   https://supabase.com/dashboard/project/vxdvcrcbegggilreaoip/sql/new
+
+2. Open file: supabase/fix-rls-policies.sql
+
+3. Copy ALL contents and paste into SQL Editor
+
+4. Click RUN button
+
+5. Wait for "Success" message
+
+6. Restart your dev server
+
+═══════════════════════════════════════════════════════════════
+
+WHAT THIS FIXES:
+  ✅ Allows admins to create users
+  ✅ Allows admins to edit users
+  ✅ Allows admins to delete users
+  ✅ Maintains security (only admins can manage users)
+  ✅ Fixes Next.js 15 async params errors
+
+═══════════════════════════════════════════════════════════════
+
+AFTER APPLYING:
+  • Try adding a new user
+  • Should work without RLS error
+  • No console warnings
+
+═══════════════════════════════════════════════════════════════
+
+NEED HELP?
+  Read: RLS_FIX_DOCUMENTATION.md
+  Run: node scripts/diagnose-and-fix-rls.js
+
+═══════════════════════════════════════════════════════════════
+
+LAST UPDATED: 2025-09-30
+STATUS: ✅ READY TO APPLY
+
+═══════════════════════════════════════════════════════════════

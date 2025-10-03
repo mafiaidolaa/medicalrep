@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار رفع الشعارات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .test-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .test-button:hover {
+            background-color: #0056b3;
+        }
+        .test-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        .preview-image {
+            max-width: 200px;
+            max-height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border-left-color: #dc3545;
+        }
+        .success {
+            color: #155724;
+            background-color: #d4edda;
+            border-left-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 اختبار وظائف رفع الشعارات</h1>
+        <p>هذا اختبار لوظائف رفع الملفات في مكون الهوية البصرية</p>
+        
+        <div>
+            <button id="testBasicUpload" class="test-button">🖼️ اختبار رفع صورة أساسي</button>
+            <button id="testMainLogo" class="test-button">🏢 اختبار رفع الشعار الرئيسي</button>
+            <button id="testIconLogo" class="test-button">📱 اختبار رفع الأيقونة</button>
+            <button id="testWatermarkLogo" class="test-button">💧 اختبار رفع العلامة المائية</button>
+        </div>
+        
+        <div id="result" class="result" style="display: none;"></div>
+        
+        <div id="console-output">
+            <h3>📝 سجل العمليات:</h3>
+            <div id="console" style="background: #000; color: #0f0; padding: 10px; border-radius: 4px; font-family: monospace; min-height: 100px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <script>
+        // إعادة إنشاء وظائف رفع الملفات للاختبار
+        
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            const time = new Date().toLocaleTimeString('ar-SA');
+            const color = type === 'error' ? '#f00' : type === 'success' ? '#0f0' : '#fff';
+            console.innerHTML += `<div style="color: ${color};">[${time}] ${message}</div>`;
+            console.scrollTop = console.scrollHeight;
+            
+            // أيضاً في console المتصفح
+            console[type === 'error' ? 'error' : 'log'](`[${time}] ${message}`);
+        }
+        
+        function showResult(message, isSuccess = true) {
+            const result = document.getElementById('result');
+            result.style.display = 'block';
+            result.className = `result ${isSuccess ? 'success' : 'error'}`;
+            result.innerHTML = message;
+        }
+        
+        // وظيفة إنشاء file input
+        function createFileInput(options = {}) {
+            return new Promise((resolve) => {
+                log('إنشاء file input...', 'info');
+                
+                const defaultOptions = {
+                    maxSizeBytes: 5 * 1024 * 1024,
+                    allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']
+                };
+                
+                const opts = { ...defaultOptions, ...options };
+                
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = opts.allowedTypes.join(',');
+                input.style.display = 'none';
+                
+                input.onchange = (event) => {
+                    try {
+                        const target = event.target;
+                        const file = target.files?.[0] || null;
+                        
+                        if (file) {
+                            log(`تم اختيار الملف: ${file.name} (${(file.size / 1024).toFixed(2)} KB, ${file.type})`, 'success');
+                        } else {
+                            log('لم يتم اختيار أي ملف', 'error');
+                        }
+                        
+                        if (document.body.contains(input)) {
+                            document.body.removeChild(input);
+                        }
+                        resolve(file);
+                    } catch (error) {
+                        log(`خطأ في onchange: ${error.message}`, 'error');
+                        if (document.body.contains(input)) {
+                            document.body.removeChild(input);
+                        }
+                        resolve(null);
+                    }
+                };
+                
+                input.oncancel = () => {
+                    log('تم إلغاء اختيار الملف', 'info');
+                    if (document.body.contains(input)) {
+                        document.body.removeChild(input);
+                    }
+                    resolve(null);
+                };
+                
+                // إضافة timeout للأمان
+                const timeout = setTimeout(() => {
+                    log('انتهت مهلة انتظار اختيار الملف', 'error');
+                    if (document.body.contains(input)) {
+                        document.body.removeChild(input);
+                    }
+                    resolve(null);
+                }, 60000);
+                
+                try {
+                    document.body.appendChild(input);
+                    log('فتح نافذة اختيار الملف...', 'info');
+                    input.click();
+                    
+                    input.addEventListener('change', () => clearTimeout(timeout));
+                    input.addEventListener('cancel', () => clearTimeout(timeout));
+                } catch (error) {
+                    log(`خطأ في فتح نافذة الملف: ${error.message}`, 'error');
+                    clearTimeout(timeout);
+                    resolve(null);
+                }
+            });
+        }
+        
+        // وظيفة التحقق من صحة الملف
+        function validateFile(file, options = {}) {
+            const defaultOptions = {
+                maxSizeBytes: 5 * 1024 * 1024,
+                allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']
+            };
+            
+            const opts = { ...defaultOptions, ...options };
+            
+            // فحص نوع الملف
+            if (!opts.allowedTypes.includes(file.type)) {
+                return {
+                    valid: false,
+                    error: `نوع الملف غير مدعوم. الأنواع المدعومة: ${opts.allowedTypes.join(', ')}`
+                };
+            }
+            
+            // فحص حجم الملف
+            if (file.size > opts.maxSizeBytes) {
+                const maxSizeMB = (opts.maxSizeBytes / (1024 * 1024)).toFixed(1);
+                return {
+                    valid: false,
+                    error: `حجم الملف كبير جداً. الحد الأقصى: ${maxSizeMB} ميجابايت`
+                };
+            }
+            
+            return { valid: true };
+        }
+        
+        // وظيفة معالجة الملف
+        function processFileUpload(file, options = {}) {
+            return new Promise((resolve) => {
+                log(`بدء معالجة الملف: ${file.name}`, 'info');
+                
+                // التحقق من صحة الملف
+                const validation = validateFile(file, options);
+                if (!validation.valid) {
+                    log(`فشل التحقق من الملف: ${validation.error}`, 'error');
+                    resolve({
+                        success: false,
+                        error: validation.error
+                    });
+                    return;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = (event) => {
+                    try {
+                        const result = event.target.result;
+                        
+                        log('تم قراءة الملف بنجاح', 'success');
+                        log(`حجم البيانات: ${(result.length / 1024).toFixed(2)} KB`, 'info');
+                        
+                        // عرض معاينة الصورة
+                        const preview = document.createElement('img');
+                        preview.src = result;
+                        preview.className = 'preview-image';
+                        preview.alt = 'معاينة الصورة المرفوعة';
+                        
+                        const resultDiv = document.getElementById('result');
+                        resultDiv.appendChild(preview);
+                        
+                        resolve({
+                            success: true,
+                            data: {
+                                base64: result,
+                                fileName: file.name,
+                                fileSize: file.size,
+                                fileType: file.type
+                            }
+                        });
+                    } catch (error) {
+                        log(`خطأ في معالجة الملف: ${error.message}`, 'error');
+                        resolve({
+                            success: false,
+                            error: 'خطأ في معالجة الملف'
+                        });
+                    }
+                };
+                
+                reader.onerror = () => {
+                    log('فشل في قراءة الملف', 'error');
+                    resolve({
+                        success: false,
+                        error: 'فشل في قراءة الملف'
+                    });
+                };
+                
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // وظيفة اختبار رفع الملفات
+        async function testFileUpload(logoType = 'main') {
+            try {
+                log(`=== بدء اختبار رفع ${logoType} ===`, 'info');
+                
+                // خيارات مختلفة حسب نوع الشعار
+                const uploadOptions = {
+                    'main': {
+                        maxSizeBytes: 2 * 1024 * 1024,
+                        allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'],
+                        maxWidth: 500,
+                        maxHeight: 200
+                    },
+                    'icon': {
+                        maxSizeBytes: 1 * 1024 * 1024,
+                        allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'],
+                        maxWidth: 128,
+                        maxHeight: 128
+                    },
+                    'watermark': {
+                        maxSizeBytes: 1 * 1024 * 1024,
+                        allowedTypes: ['image/png', 'image/svg+xml'],
+                        maxWidth: 300,
+                        maxHeight: 300
+                    }
+                };
+                
+                const options = uploadOptions[logoType] || uploadOptions.main;
+                log(`خيارات الرفع: ${JSON.stringify(options)}`, 'info');
+                
+                // إنشاء file input
+                const file = await createFileInput(options);
+                
+                if (!file) {
+                    showResult('لم يتم اختيار ملف أو تم إلغاء العملية', false);
+                    log('انتهى الاختبار بدون اختيار ملف', 'info');
+                    return;
+                }
+                
+                // معالجة الملف
+                const result = await processFileUpload(file, options);
+                
+                if (result.success) {
+                    showResult(`✅ تم رفع ${logoType} بنجاح!<br>الاسم: ${result.data.fileName}<br>الحجم: ${(result.data.fileSize / 1024).toFixed(2)} KB<br>النوع: ${result.data.fileType}`, true);
+                    log(`=== اكتمل الاختبار بنجاح ===`, 'success');
+                } else {
+                    showResult(`❌ فشل في رفع ${logoType}: ${result.error}`, false);
+                    log(`=== فشل الاختبار: ${result.error} ===`, 'error');
+                }
+                
+            } catch (error) {
+                log(`خطأ عام في الاختبار: ${error.message}`, 'error');
+                showResult(`❌ خطأ عام: ${error.message}`, false);
+            }
+        }
+        
+        // ربط الأحداث بالأزرار
+        document.getElementById('testBasicUpload').addEventListener('click', () => {
+            testFileUpload('basic');
+        });
+        
+        document.getElementById('testMainLogo').addEventListener('click', () => {
+            testFileUpload('main');
+        });
+        
+        document.getElementById('testIconLogo').addEventListener('click', () => {
+            testFileUpload('icon');
+        });
+        
+        document.getElementById('testWatermarkLogo').addEventListener('click', () => {
+            testFileUpload('watermark');
+        });
+        
+        // رسالة ترحيب
+        log('🚀 تم تحميل صفحة الاختبار بنجاح', 'success');
+        log('انقر على أي من الأزرار أعلاه لبدء اختبار رفع الملفات', 'info');
+    </script>
+</body>
+</html>
