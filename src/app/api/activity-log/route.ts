@@ -60,6 +60,16 @@ async function getCachedSession(req: NextRequest) {
 }
 
 // Important/critical types aligned with DB views and README
+// Canonical types and aliases mapping to keep API flexible with client payloads
+const TYPE_ALIASES: Record<string, string> = {
+  register_clinic: 'clinic_register',
+  collection: 'debt_payment',
+};
+function canonicalType(t: string | undefined): string {
+  const key = (t || '').toLowerCase();
+  return TYPE_ALIASES[key] ?? key;
+}
+
 const IMPORTANT_TYPES = [
   'login',
   'logout',
@@ -168,8 +178,9 @@ export async function POST(request: NextRequest) {
     // Cap batch size
     const capped = items.slice(0, MAX_BATCH);
 
-    // Filter: require type and title; keep only important types
-    const filtered = capped.filter((it) => it && it.type && it.title && IMPORTANT_TYPES.includes(it.type));
+    // Map to canonical types and filter: require type and title; keep only important types
+    const mapped = capped.map((it) => ({ ...it, type: canonicalType(it?.type) }));
+    const filtered = mapped.filter((it) => it && it.type && it.title && IMPORTANT_TYPES.includes(it.type));
 
     if (filtered.length === 0) {
       return NextResponse.json({ success: true, skipped: true });

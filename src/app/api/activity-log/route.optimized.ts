@@ -26,6 +26,16 @@ function cleanupCache() {
 // Run cleanup every 30 seconds
 setInterval(() => cleanupCache(), 30000);
 
+// Canonical types and aliases mapping to keep API flexible with client payloads
+const TYPE_ALIASES: Record<string, string> = {
+  register_clinic: 'clinic_register',
+  collection: 'debt_payment',
+};
+function canonicalType(t: string | undefined): string {
+  const key = (t || '').toLowerCase();
+  return TYPE_ALIASES[key] ?? key;
+}
+
 // ============================================
 // GET - Fetch activity logs (optimized)
 // ============================================
@@ -91,7 +101,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, skipped: true });
     }
 
-    const { type, title, details, isSuccess = true, entityType, entityId } = body;
+    const rawType = body?.type;
+    const type = canonicalType(rawType);
+    const { title, details, isSuccess = true, entityType, entityId } = body;
 
     // Quick validation
     if (!type || !title) {
