@@ -85,7 +85,41 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Logout tracking database error:', error);
-      // Still return success - logout tracking shouldn't fail the logout process
+      // Fallback: insert only essential columns for minimal schemas
+      try {
+        const minimal: any = {
+          user_id: activityData.user_id,
+          action: activityData.action,
+          entity_type: activityData.entity_type,
+          entity_id: activityData.entity_id,
+          title: activityData.title,
+          details: activityData.details,
+          type: activityData.type,
+          is_success: activityData.is_success,
+          timestamp: activityData.timestamp,
+          created_at: activityData.created_at,
+        };
+        const { error: err2 } = await (supabase as any)
+          .from('activity_log')
+          .insert(minimal);
+        if (err2) {
+          console.error('Logout minimal log insert failed:', err2);
+          // Last resort: essentials only
+          const essentials = {
+            user_id: minimal.user_id,
+            action: minimal.action,
+            type: minimal.type,
+            title: minimal.title,
+            timestamp: minimal.timestamp,
+            created_at: minimal.created_at,
+          };
+          await (supabase as any)
+            .from('activity_log')
+            .insert(essentials);
+        }
+      } catch (e) {
+        console.warn('Logout tracking fallback exception:', e);
+      }
     } else {
       console.log('✅ Logout activity tracked successfully');
     }

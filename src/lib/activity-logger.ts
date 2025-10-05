@@ -205,6 +205,45 @@ class ActivityLogger {
 
       if (error) {
         console.error('Failed to log activity:', error);
+        // Fallback: retry with an ultra-minimal set of columns compatible with older schemas
+        try {
+          const minimal: any = {
+            user_id: logEntry.user_id,
+            action: logEntry.action,
+            entity_type: logEntry.entity_type,
+            entity_id: logEntry.entity_id,
+            title: logEntry.title,
+            details: logEntry.details,
+            type: logEntry.type,
+            is_success: logEntry.is_success,
+            failure_reason: logEntry.failure_reason,
+            timestamp: logEntry.timestamp,
+            created_at: logEntry.created_at,
+          };
+          const { error: err2 } = await (supabase as any)
+            .from('activity_log')
+            .insert(minimal);
+          if (err2) {
+            console.error('Activity log fallback failed:', err2);
+            // Last-resort fallback: only the strict essentials
+            const essentials: any = {
+              user_id: minimal.user_id,
+              action: minimal.action,
+              type: minimal.type,
+              title: minimal.title,
+              timestamp: minimal.timestamp,
+              created_at: minimal.created_at,
+            };
+            const { error: err3 } = await (supabase as any)
+              .from('activity_log')
+              .insert(essentials);
+            if (err3) {
+              console.error('Activity log essentials fallback failed:', err3);
+            }
+          }
+        } catch (e) {
+          console.error('Activity log fallback exception:', e);
+        }
       } else {
         console.log(`✅ Activity logged: ${data.action} - ${data.title}`);
       }

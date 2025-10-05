@@ -8,7 +8,7 @@ import { createServerSupabaseClient } from '@/lib/supabase';
 // - Soft delete: set is_active = false
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -18,7 +18,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const id = params?.id;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: 'Missing clinic id' }, { status: 400 });
     }

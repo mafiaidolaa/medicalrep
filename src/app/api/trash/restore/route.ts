@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
 
     const map: Record<string, string> = {
       clinics: 'clinics',
+      users: 'users',
       orders: 'orders',
       visits: 'visits',
       invoices: 'invoices',
@@ -33,9 +34,16 @@ export async function POST(request: NextRequest) {
 
     const supabase = createServerSupabaseClient();
 
+    // Snapshot before restore (so we know what we restored)
+    const { data: snapshot } = await (supabase as any)
+      .from(table)
+      .select('*')
+      .eq('id', id)
+      .single();
+
     // Prepare generic restore payload
     const payload: any = { deleted_at: null, deleted_by: null, updated_at: new Date().toISOString() };
-    if (table === 'clinics') payload.is_active = true;
+    if (table === 'clinics' || table === 'users') payload.is_active = true;
 
     const { error } = await (supabase as any)
       .from(table)
@@ -44,6 +52,22 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // Log activity: restore
+    try {
+      const { activityLogger } = await import('@/lib/activity-logger');
+      await activityLogger.log({
+        action: 'restore_from_trash',
+        entity_type: section.slice(0, -1),
+        entity_id: id,
+        title: `استعادة من السلة: ${section}:${id}`,
+        details: `تمت الاستعادة بواسطة ${(session.user as any)?.email || 'unknown'}`,
+        type: 'update',
+        changes: snapshot ? { snapshot } : undefined,
+      } as any, request as any);
+    } catch (logErr) {
+      console.warn('Trash restore log warning:', logErr);
     }
 
     return NextResponse.json({ success: true });

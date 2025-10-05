@@ -186,7 +186,7 @@ export function MapsProvider({ children }: MapsProviderProps) {
     try {
       // تحديث الإعدادات عبر API
       const response = await fetch('/api/system-settings/maps', {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },

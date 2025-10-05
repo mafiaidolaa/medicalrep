@@ -535,8 +535,9 @@ class LocationService {
     city: string;
     country: string;
   }> {
-    // This would require Google Maps API key from settings
-    const apiKey = localStorage.getItem('google_maps_api_key');
+    // Always read API key from system settings (single source of truth)
+    const { systemSettingsService } = await import('@/lib/system-settings-service');
+    const apiKey = await systemSettingsService.getGoogleMapsApiKey();
     if (!apiKey) {
       throw new Error('Google Maps API key not configured');
     }

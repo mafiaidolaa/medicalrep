@@ -72,14 +72,7 @@ class SystemSettingsService {
     }
 
     try {
-      // محاولة تحميل من localStorage أولاً (للاستجابة السريعة)
-      const localSettings = localStorage.getItem(cacheKey);
-      if (localSettings) {
-        const parsed = JSON.parse(localSettings);
-        this.mapsSettings = parsed;
-      }
-
-      // تحديث من الخادم
+      // تحميل من الخادم (مصدر الحقيقة الوحيد)
       const response = await fetch('/api/system-settings/maps');
       if (response.ok) {
         const serverSettings = await response.json();
@@ -87,11 +80,8 @@ class SystemSettingsService {
         // تحويل الإعدادات من تنسيق قاعدة البيانات إلى تنسيق التطبيق
         const mapsSettings = this.transformServerSettingsToClient(serverSettings);
         
-        // حفظ في الكاش والذاكرة المحلية
+        // حفظ في الكاش بالذاكرة فقط
         this.mapsSettings = mapsSettings;
-        localStorage.setItem(cacheKey, JSON.stringify(mapsSettings));
-        localStorage.setItem('google_maps_api_key', mapsSettings.apiKey || '');
-        
         this.lastFetch = now;
         return mapsSettings;
       }
@@ -133,10 +123,8 @@ class SystemSettingsService {
       });
 
       if (response.ok) {
-        // تحديث الكاش المحلي
-        this.mapsSettings = { ...this.getDefaultMapsSettings(), ...settings };
-        localStorage.setItem('maps_settings', JSON.stringify(this.mapsSettings));
-        localStorage.setItem('google_maps_api_key', settings.apiKey || '');
+        // تحديث الكاش بالذاكرة فقط
+        this.mapsSettings = { ...this.getDefaultMapsSettings(), ...settings } as GoogleMapsSettings;
         this.lastFetch = Date.now();
         return true;
       }
@@ -204,7 +192,7 @@ class SystemSettingsService {
   private getDefaultMapsSettings(): GoogleMapsSettings {
     return {
       enabled: false,
-      apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+      apiKey: '',
       defaultZoom: 10,
       defaultCenter: {
         lat: 30.0444, // Cairo coordinates as default

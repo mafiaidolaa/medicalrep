@@ -171,6 +171,7 @@ const ClinicsPageContent = () => {
     const [lineFilter, setLineFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('default');
+    const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
 
     // Get current user info for area restrictions
     const currentUserData = useMemo(() => {
@@ -180,31 +181,55 @@ const ClinicsPageContent = () => {
         return null;
     }, [currentUser, users]);
 
-    // Team-aware clinics visibility
-    const availableClinics = useMemo(() => {
-        return getVisibleClinicsForUser(currentUserData || currentUser, clinics, users);
-    }, [clinics, currentUserData, currentUser, users]);
+    // Determine admin explicitly (case-insensitive)
+    const isAdmin = useMemo(() => {
+        const role = (currentUserData?.role || (currentUser as any)?.role) as string | undefined;
+        return typeof role === 'string' && role.toLowerCase() === 'admin';
+    }, [currentUserData, currentUser]);
 
-    // Available areas and lines for filters (based on user permissions)
+    // Team-aware clinics visibility (admin sees all)
+    const availableClinics = useMemo(() => {
+        const activeOnly = (list: any[]) => (list || []).filter(c => (c as any)?.is_active !== false);
+        if (isAdmin) return activeOnly(clinics);
+        return activeOnly(getVisibleClinicsForUser(currentUserData || currentUser, clinics, users));
+    }, [clinics, currentUserData, currentUser, users, isAdmin]);
+
+    // Available areas and lines for filters (admin sees all)
     const availableAreas = useMemo(() => {
         try {
-            const out = getVisibleAreasForUser(currentUserData || currentUser, Array.isArray(areas) ? areas : (areas ? (Object.values(areas as any) as any[]) : []), clinics);
+            const baseAreas = Array.isArray(areas) ? areas : (areas ? (Object.values(areas as any) as any[]) : []);
+            if (isAdmin) return (baseAreas as any[]).filter(Boolean).map(String);
+            const out = getVisibleAreasForUser(currentUserData || currentUser, baseAreas, clinics);
             const arr = Array.isArray(out) ? out : (out ? (Object.values(out as any) as any[]) : []);
             return (arr as any[]).filter(Boolean).map(String);
         } catch { return []; }
-    }, [areas, currentUserData, currentUser, clinics]);
+    }, [areas, currentUserData, currentUser, clinics, isAdmin]);
 
     const availableLinesArr = useMemo(() => {
         const baseLines = Array.isArray(lines) ? lines : (lines ? (Object.values(lines as any) as any[]) : []);
-        const raw = getVisibleLinesForUser(currentUserData || currentUser, baseLines as string[], clinics);
+        const raw = isAdmin
+            ? baseLines
+            : getVisibleLinesForUser(currentUserData || currentUser, baseLines as string[], clinics);
         const arr = Array.isArray(raw) ? raw : (raw ? (Object.values(raw as any) as any[]) : []);
         return (arr as any[]).filter(Boolean).map(String);
-    }, [lines, currentUserData, currentUser, clinics]);
+    }, [lines, currentUserData, currentUser, clinics, isAdmin]);
 
     const safeLines = useMemo(() => (Array.isArray(availableLinesArr) ? availableLinesArr : []), [availableLinesArr]);
 
+    // Stabilize arrays for select rendering
+    const safeAreasForSelect = useMemo(() => {
+        const arr = Array.isArray(availableAreas) ? availableAreas : (availableAreas ? (Object.values(availableAreas as any) as any[]) : []);
+        return (arr as any[]).filter(Boolean).map(String);
+    }, [availableAreas]);
+
+    const safeLinesForSelect = useMemo(() => {
+        const arr = Array.isArray(safeLines) ? safeLines : (safeLines ? (Object.values(safeLines as any) as any[]) : []);
+        return (arr as any[]).filter(Boolean).map(String);
+    }, [safeLines]);
+
 const filteredClinics = useMemo(() => {
         const base = availableClinics
+            .filter(c => !hiddenIds.has(c.id))
             .filter(c => areaFilter === 'all' || c.area === areaFilter)
             .filter(c => lineFilter === 'all' || c.line === lineFilter)
             .filter(c => 
@@ -300,16 +325,18 @@ const filteredClinics = useMemo(() => {
                     <SelectTrigger><SelectValue placeholder={t('clinics.filters.area')} /></SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">{t('clinics.filters.all_areas')}</SelectItem>
-                        {availableAreas.map(area => <SelectItem key={area} value={area}>{area}</SelectItem>)}
+                        {safeAreasForSelect.map(area => (
+                            <SelectItem key={area} value={area}>{area}</SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
                  <Select value={lineFilter} onValueChange={setLineFilter}>
                     <SelectTrigger><SelectValue placeholder={t('clinics.filters.line')} /></SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">{t('clinics.filters.all_lines')}</SelectItem>
-                        {safeLines.map((line: any) => (
-                            <SelectItem key={String(line)} value={String(line)}>
-                                {String(line)}
+                        {safeLinesForSelect.map((line) => (
+                            <SelectItem key={line} value={line}>
+                                {line}
                             </SelectItem>
                         ))}
                     </SelectContent>
@@ -336,11 +363,23 @@ const filteredClinics = useMemo(() => {
 {filteredClinics.map(clinic => (
     <ClinicCard key={clinic.id} clinic={clinic} isAdmin={(currentUser as any)?.role === 'admin'} onDelete={async (c) => {
         try {
+            // Optimistically hide to prevent flicker
+            setHiddenIds(prev => {
+                const next = new Set(prev);
+                next.add(c.id);
+                return next;
+            });
             await deleteClinic(c.id);
             // Refresh list from server to avoid reappearing due to stale caches
             await getClinics();
         } catch (e: any) {
             console.error('Failed to delete clinic:', e);
+            // On failure, unhide
+            setHiddenIds(prev => {
+                const next = new Set(prev);
+                next.delete(c.id);
+                return next;
+            });
         }
     }} />
 ))}

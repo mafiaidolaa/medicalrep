@@ -12,16 +12,18 @@ interface TrashItem {
   id: string;
   user_id: string;
   action: string; // move_to_trash
-  entity_type: string; // clinic | order | visit | invoice | expense
+  entity_type: string; // clinic | user | order | visit | invoice | expense
   entity_id: string;
   title?: string;
   details?: string;
   timestamp: string;
   changes?: { snapshot?: any } | null;
+  deleted_by_user?: { id: string; full_name?: string; email?: string; role?: string } | null;
 }
 
 const sections = [
   { key: "clinics", label: "العيادات" },
+  { key: "users", label: "المستخدمون" },
   { key: "orders", label: "الطلبات" },
   { key: "visits", label: "الزيارات" },
   { key: "invoices", label: "الفواتير" },

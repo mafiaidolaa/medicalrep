@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
       
       const sections = {
         clinics: 'clinics',
+        users: 'users',
         orders: 'orders', 
         visits: 'visits',
         invoices: 'invoices',
@@ -52,6 +53,7 @@ export async function GET(request: NextRequest) {
     if (section) {
       const sectionMap: Record<string, string> = {
         clinics: 'clinics',
+        users: 'users',
         orders: 'orders',
         visits: 'visits', 
         invoices: 'invoices',
@@ -66,19 +68,68 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid section' }, { status: 400 });
       }
 
-      // Fetch deleted items with user info who deleted them
-      const { data: items, error } = await (supabase as any)
-        .from(table)
-        .select(`
-          *,
-          deleted_by_user:users!${table}_deleted_by_fkey(id, full_name, email, role)
-        `)
-        .not('deleted_at', 'is', null)
-        .order('deleted_at', { ascending: false });
+      // Fetch deleted items; prefer relationship join if FK exists, otherwise fallback to manual user lookup
+      let items: any[] | null = null;
+      let error: any = null;
+      try {
+        const resp = await (supabase as any)
+          .from(table)
+          .select(`
+            *,
+            deleted_by_user:users!${table}_deleted_by_fkey(id, full_name, email, role)
+          `)
+          .not('deleted_at', 'is', null)
+          .order('deleted_at', { ascending: false });
+        items = resp.data;
+        error = resp.error;
+      } catch (e: any) {
+        error = e;
+      }
 
-      if (error) {
+      // If relationship missing (PGRST200/204 or message mentions relationship), fallback to manual join
+      const relationshipMissing = !!error && (
+        String(error?.code).startsWith('PGRST2') ||
+        /relationship|schema cache|foreign key|fkey/i.test(String(error?.message || ''))
+      );
+
+      if (error && !relationshipMissing) {
         console.error(`Error fetching ${section}:`, error);
         return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
+      if (!items || relationshipMissing) {
+        // Fallback: fetch items only
+        const { data: baseItems, error: baseErr } = await (supabase as any)
+          .from(table)
+          .select('*')
+          .not('deleted_at', 'is', null)
+          .order('deleted_at', { ascending: false });
+        if (baseErr) {
+          console.error(`Error fetching ${section} base:`, baseErr);
+          return NextResponse.json({ error: baseErr.message }, { status: 500 });
+        }
+        items = baseItems || [];
+
+        // Try to fetch users for deleted_by values, if any
+        const ids = Array.from(new Set((items as any[])
+          .map((it: any) => it.deleted_by)
+          .filter(Boolean))) as string[];
+
+        let usersById: Record<string, any> = {};
+        if (ids.length > 0) {
+          const { data: urows, error: uerr } = await (supabase as any)
+            .from('users')
+            .select('id, full_name, email, role')
+            .in('id', ids);
+          if (!uerr && urows) {
+            usersById = Object.fromEntries(urows.map((u: any) => [u.id, u]));
+          }
+        }
+        // Attach in a field named deleted_by_user for UI
+        items = (items as any[]).map((it: any) => ({
+          ...it,
+          deleted_by_user: it.deleted_by ? usersById[it.deleted_by] : null,
+        }));
       }
 
       // Transform to match the expected format
@@ -94,7 +145,7 @@ export async function GET(request: NextRequest) {
         changes: {
           snapshot: item
         },
-        deleted_by_user: item.deleted_by_user
+        deleted_by_user: item.deleted_by_user || null,
       }));
 
       return NextResponse.json(trashItems);
@@ -129,6 +180,8 @@ function getItemTitle(item: any, section: string): string {
       return item.description || item.category || `نفقة ${item.id}`;
     case 'products':
       return item.name || `منتج ${item.id}`;
+    case 'users':
+      return item.full_name || item.username || item.email || `مستخدم ${item.id}`;
     case 'payments':
       return item.reference_number || `دفعة ${item.payment_date || item.id}`;
     case 'collections':
@@ -157,6 +210,8 @@ function getItemDetails(item: any, section: string): string {
       return `المبلغ: ${item.amount || 0} - الطريقة: ${item.payment_method || 'غير محددة'} - الحالة: ${item.status || 'غير محددة'}`;
     case 'collections':
       return `المبلغ: ${item.amount || 0} - الطريقة: ${item.payment_method || 'غير محددة'}`;
+    case 'users':
+      return `الدور: ${item.role || 'غير محدد'} - الحالة: ${item.is_active === false ? 'معطل' : 'نشط'}`;
     default:
       return 'لا توجد تفاصيل إضافية';
   }

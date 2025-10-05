@@ -45,10 +45,15 @@ export async function DELETE(
       console.warn('Failed to fetch user snapshot before delete:', fetchErr);
     }
 
-    // حذف منطقي: تعطيل المستخدم بدلاً من حذفه
+    // حذف منطقي: تعطيل المستخدم وتسجيل بيانات الحذف
     const { error } = await (supabase as any)
       .from('users')
-      .update({ is_active: false, updated_at: new Date().toISOString() })
+      .update({ 
+        is_active: false, 
+        deleted_at: new Date().toISOString(),
+        deleted_by: (session.user as any)?.id || null,
+        updated_at: new Date().toISOString() 
+      })
       .eq('id', userId)
 
     if (error) {
